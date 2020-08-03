@@ -1,4 +1,5 @@
 build
+.idea
 
 # project specific
 src/public/plugins
