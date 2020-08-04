@@ -2,7 +2,7 @@ build
 .idea
 
 # project specific
-src/public/plugins
+plugins
 out
 dist
 node_modules

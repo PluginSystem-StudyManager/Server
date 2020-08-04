@@ -60,7 +60,22 @@ Post Request to the server with the following data:
 - Zip file
 - authentication
     - Cookie: username and token
+- plugin_id
+
+Structure:
+'Content-Type': 'multipart/form-data;
+'Cookie': 'pluginId=XXX; token=XXX; username=XXX'
+body: 
+...
+Content-Disposition: form-data; name="file"; filename="XXX.zip"
+...
 
 Response:
 
 JSON with result
+
+
+# Nice to haves later on
+
+- plugin versioning
+- key authentication
