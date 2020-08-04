@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"server/homepage"
+	"server/plugin_upload"
 	"server/login"
 	"server/register"
 	"server/server"
@@ -18,6 +19,8 @@ func main() {
 	homepage.Init(router)
 	login.Init(router)
 	register.Init(router)
+	plugin_upload.Init(router)
+
 
 	s := server.New(":8080", router)
 	err := s.ListenAndServe()
