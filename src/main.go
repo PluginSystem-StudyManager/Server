@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"server/homepage"
+	"server/login"
 	"server/server"
 	"server/utils"
 )
@@ -14,6 +15,8 @@ func main() {
 	router.GET("/dist/*filepath", serveStatic)
 
 	homepage.Init(router)
+	login.Init(router)
+
 	s := server.New(":8080", router)
 	err := s.ListenAndServe()
 	if err != nil {
