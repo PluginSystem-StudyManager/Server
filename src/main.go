@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"server/homepage"
 	"server/plugin_upload"
+	"server/login"
 	"server/server"
 	"server/utils"
 )
@@ -15,6 +16,7 @@ func main() {
 	router.GET("/dist/*filepath", serveStatic)
 
 	homepage.Init(router)
+	login.Init(router)
 	plugin_upload.Init(router)
 
 	s := server.New(":8080", router)

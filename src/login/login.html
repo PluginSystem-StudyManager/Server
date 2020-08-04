@@ -5,12 +5,22 @@
     <title>Login</title>
     <link rel="stylesheet" href="dist/login/login.css">
 </head>
-<body>
+    <body>
 
-    <h1> Login </h1>
-    <input type="text" id="userName">
-    <input type="password" id="Password">
-    <button type="button">Login ...</button>
+        <form class="login-form">
+            <h1> Login </h1>
+            <div class="txtb">
+                <input type="text" id="userName" placeholder="Username">
+            </div>
+            <div class="txtb">
+                <input type="password" id="UserPassword" placeholder="password">
+            </div>
 
-</body>
+            <button type="submit" class="logbtn">Login</button>
+
+            <div class="bottom-text">
+                Don't have account? <a href="...">Sign up</a>
+            </div>
+        </form>
+    </body>
 </html>
