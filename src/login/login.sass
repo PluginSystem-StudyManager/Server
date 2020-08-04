@@ -1,3 +1,4 @@
+@import "src/web_lib/stylesheets/color_themes"
 
 *
   margin: 0
@@ -9,7 +10,7 @@
 
 body
   min-height: 100vh
-  background-image: linear-gradient(120deg, #3498db, #8e44ad)
+  background-image: linear-gradient(120deg, var(--color-background-default), var(--color-background-alternative))
 
 .login-form
   width: 360px
@@ -21,6 +22,7 @@ body
   left: 50%
   top: 50%
   transform: translate(-50%, -50%)
+  box-shadow: var(--dropshadow-accent)
 
   .login-form h1
     text-align: center
