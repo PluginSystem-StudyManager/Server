@@ -22,7 +22,7 @@ func main() {
 	register.Init(router)
 	plugin_upload.Init(router)
 
-	db.Open()
+	db.Init()
 	defer db.Close()
 
 	s := server.New(":8080", router)

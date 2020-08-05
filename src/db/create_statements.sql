@@ -2,7 +2,7 @@ CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE ,
     password TEXT NOT NULL ,
-    token TEXT,
+    token TEXT UNIQUE ,
     token_ttl TEXT
 );
 
