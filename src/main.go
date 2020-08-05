@@ -4,9 +4,10 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
+	"server/db"
 	"server/homepage"
-	"server/plugin_upload"
 	"server/login"
+	"server/plugin_upload"
 	"server/register"
 	"server/server"
 	"server/utils"
@@ -21,12 +22,15 @@ func main() {
 	register.Init(router)
 	plugin_upload.Init(router)
 
+	db.Open()
+	defer db.Close()
 
 	s := server.New(":8080", router)
 	err := s.ListenAndServe()
 	if err != nil {
 		log.Fatalf("Server error: %v", err)
 	}
+
 }
 
 func serveStatic(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
