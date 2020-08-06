@@ -12,7 +12,7 @@ var db *sql.DB
 
 func Init() {
 	dbPath := "../dist/foo.db"
-	_ = os.Remove(dbPath)
+	os.Remove(dbPath)
 
 	dbLoc, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
@@ -53,6 +53,9 @@ func Init() {
 		log.Fatal(err)
 		return
 	}
+	// TODO: Debug only
+	_, _ = AddUser("John", "12345")
+	_, _ = UpdateToken("John", "12345", "2022")
 }
 
 func Close() {
@@ -75,9 +78,10 @@ func UserIdByToken(token string) (int, error) {
 		log.Fatal(err)
 		return -1, err
 	}
+	defer rows.Close()
 	for rows.Next() {
 		var id int
-		err = rows.Scan(id)
+		err = rows.Scan(&id)
 		if err != nil {
 			log.Fatal(err)
 			return -1, err
@@ -88,51 +92,53 @@ func UserIdByToken(token string) (int, error) {
 }
 
 type PluginData struct {
-	name             string
-	shortDescription string
-	tags             []string
-	userIds          []int
+	Name             string
+	ShortDescription string
+	Tags             []string
+	UserIds          []int
 }
 
-func addPlugin(data PluginData) {
-	res, err := insert("INSERT INTO plugins(name, shortDescription) values(?, ?)", data.name, data.shortDescription)
+func AddPlugin(data PluginData) error {
+	res, err := insert("INSERT INTO plugins(Name, shortDescription) values(?, ?)", data.Name, data.ShortDescription)
 	if err != nil {
 		log.Fatal(err)
+		return err
 	}
 	pluginId, err := res.LastInsertId()
-	for _, tag := range data.tags {
+	for _, tag := range data.Tags {
 		res, err = insert("INSERT INTO plugins_tags(plugin, tag) values(?, ?)", pluginId, tag)
 		if err != nil {
 			log.Fatal(err)
+			return err
 		}
 	}
-	for _, userId := range data.userIds {
-		res, err = insert("INSERT INTO user_plugins(plugin, tag) values(?, ?)", pluginId, userId)
+	for _, userId := range data.UserIds {
+		res, err = insert("INSERT INTO user_plugins(user, plugin) values(?, ?)", userId, pluginId)
 		if err != nil {
 			log.Fatal(err)
+			return err
 		}
 	}
+	return nil
 }
 
 // Utils
 
 func insert(statement string, args ...interface{}) (sql.Result, error) {
-	conn, err := db.Begin()
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
 	stmt, err := db.Prepare(statement)
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-	defer stmt.Close()
-	res, err := stmt.Exec(args)
+
+	res, err := stmt.Exec(args...)
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-	_ = conn.Commit()
+	err = stmt.Close()
+	if err != nil {
+		log.Printf("error closing stmt: %v\n", err)
+	}
 	return res, nil
 }

@@ -64,7 +64,7 @@ Post Request to the server with the following data:
 
 Structure:
 'Content-Type': 'multipart/form-data;
-'Cookie': 'pluginId=XXX; token=XXX; username=XXX'
+'Cookie': 'pluginName=XXX; token=XXX'
 body: 
 ...
 Content-Disposition: form-data; name="file"; filename="XXX.zip"
