@@ -81,7 +81,7 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 	err = unzip(zipPath, pluginPath)
 	_ = os.Remove(zipPath)
 	if err != nil {
-		log.Printf("Error unzipping path \n")
+		log.Printf("Error unzipping path (%v): %v -->%v\n", err, zipPath, pluginPath)
 		return errors.New(fmt.Sprintf("zip: error unzipping: %s", err))
 	}
 	// TODO: validate correct uploaded files
@@ -102,7 +102,7 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 	if err != nil {
 		// Add
 		err = db.AddPlugin(db.PluginData{
-			Name:             pluginInfo.Name,
+			Name:             pluginId, // TODO: use Name from File or better ensure both are the sane
 			ShortDescription: pluginInfo.ShortDescription,
 			Tags:             []string{},
 			UserIds:          []int{userId},

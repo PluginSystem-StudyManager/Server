@@ -7,6 +7,7 @@ import (
 	"server/db"
 	"server/homepage"
 	"server/login"
+	"server/marketplace"
 	"server/plugins"
 	"server/register"
 	"server/server"
@@ -21,6 +22,7 @@ func main() {
 	login.Init(router)
 	register.Init(router)
 	plugins.Init(router)
+	marketplace.Init(router)
 
 	db.Init()
 	defer db.Close()
