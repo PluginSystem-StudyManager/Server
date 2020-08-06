@@ -6,10 +6,10 @@ import (
 )
 
 type PluginData struct {
-	Name             string
-	ShortDescription string
-	Tags             []string
-	UserIds          []int
+	Name             string   `json:"name"`
+	ShortDescription string   `json:"short_description"`
+	Tags             []string `json:"tags"`
+	UserIds          []int    `json:"user_ids"`
 }
 
 func AddPlugin(data PluginData) error {
@@ -55,6 +55,25 @@ func PluginIdByName(name string) (int, error) {
 	return -1, errors.New("no valid token found: " + name)
 }
 
-func ListPlugins() {
-
+func ListPlugins() ([]PluginData, error) {
+	rows, err := db.Query(`
+	SELECT name, shortDescription
+	FROM plugins
+	`)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
+	defer rows.Close()
+	var plugins []PluginData
+	for rows.Next() {
+		var plugin PluginData
+		err = rows.Scan(&plugin.Name, &plugin.ShortDescription)
+		if err != nil {
+			log.Fatal(err)
+			return nil, err
+		}
+		plugins = append(plugins, plugin)
+	}
+	return plugins, nil
 }
