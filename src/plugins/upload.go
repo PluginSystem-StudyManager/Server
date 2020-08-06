@@ -1,16 +1,18 @@
-package plugin_upload
+package plugins
 
 import (
 	"archive/zip"
 	"errors"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"gopkg.in/yaml.v2"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"server/db"
 )
 
 const (
@@ -18,21 +20,10 @@ const (
 	pluginsTmpPath = "../plugins/tmp"
 )
 
-func Init(router *httprouter.Router) {
-	router.POST("/plugins/upload", upload)
-
-	// folders
-	mkIfNotExist := func(path string) error {
-		if _, err := os.Stat(path); os.IsNotExist(err) {
-			return os.MkdirAll(path, os.ModeDir)
-		}
-		return nil
-	}
-	err := mkIfNotExist(pluginsPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_ = mkIfNotExist(pluginsTmpPath)
+type PluginInfo struct {
+	Name             string `yaml:"name"`
+	ShortDescription string `yaml:"shortDescription"`
+	// TODO: Add all fields
 }
 
 // upload handles the upload request.
@@ -40,10 +31,9 @@ func Init(router *httprouter.Router) {
 // The final logic is implemented in ``upload_impl()``
 func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	// Parse arguments
-	username, errUser := request.Cookie("username")
 	token, errToken := request.Cookie("token")
-	pluginId, errId := request.Cookie("pluginId")
-	if errUser != nil || errToken != nil || errId != nil {
+	pluginId, errId := request.Cookie("pluginName")
+	if errToken != nil || errId != nil {
 		respond(writer, http.StatusBadRequest, "No cookie with authentication data specified")
 		return
 	}
@@ -74,7 +64,7 @@ func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Para
 	content := make([]byte, file.Size)
 	_, _ = fileHandle.Read(content)
 	_ = fileHandle.Close()
-	err = uploadImpl(username.Value, token.Value, pluginId.Value, content)
+	err = uploadImpl(token.Value, pluginId.Value, content)
 	if err != nil {
 		respond(writer, http.StatusBadRequest, err.Error())
 		return
@@ -82,24 +72,55 @@ func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Para
 	respond(writer, http.StatusOK, "Successfully uploaded plugin")
 }
 
-func uploadImpl(username string, token string, pluginId string, fileContent []byte) error {
-	log.Printf("username: %s, token: %s, pluginId: %s", username, token, pluginId)
+func uploadImpl(token string, pluginId string, fileContent []byte) error {
+	log.Printf("token: %s, pluginId: %s", token, pluginId)
 	// Authenticate
-	// TODO: check db or session
-	if len(username) == 0 || len(token) == 0 {
-		return errors.New("not authenticated")
+	userId, err := db.UserIdByToken(token)
+	if err != nil {
+		log.Printf("Not authenticated: %v\n", err)
+		return err
 	}
-
 	// save and update
-	// TODO: new entry in DB
 	zipPath := filepath.Join(pluginsTmpPath, fmt.Sprintf("%s.zip", pluginId))
 	_ = ioutil.WriteFile(zipPath, fileContent, os.ModePerm)
 	pluginPath := filepath.Join(pluginsPath, pluginId)
-	err := unzip(zipPath, pluginPath)
+	err = unzip(zipPath, pluginPath)
 	_ = os.Remove(zipPath)
 	if err != nil {
-		log.Printf("Error unzipping path")
+		log.Printf("Error unzipping path \n")
 		return errors.New(fmt.Sprintf("zip: error unzipping: %s", err))
+	}
+	// TODO: validate correct uploaded files
+	// read plugin_info.yaml and add entry in db
+	infoFile := filepath.Join(pluginPath, "plugin_info.yaml")
+	data, err := ioutil.ReadFile(infoFile)
+	if err != nil {
+		log.Printf("Error reading file: \n" + infoFile)
+		return err
+	}
+	pluginInfo := PluginInfo{}
+	err = yaml.Unmarshal(data, &pluginInfo)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	_, err = db.PluginIdByName(pluginInfo.Name)
+	if err != nil {
+		// Add
+		err = db.AddPlugin(db.PluginData{
+			Name:             pluginInfo.Name,
+			ShortDescription: pluginInfo.ShortDescription,
+			Tags:             []string{},
+			UserIds:          []int{userId},
+		})
+		if err != nil {
+			// TODO: Delete upload?
+			log.Printf("Error adding plugin to db: %v\n", err)
+			return err
+		}
+	} else {
+		// Update
+		// TODO: update shortDescription, tags, ...
 	}
 
 	log.Printf("Successfully uploaded plugin: %s", pluginId)
