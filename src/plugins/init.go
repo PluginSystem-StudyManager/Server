@@ -9,6 +9,7 @@ import (
 func Init(router *httprouter.Router) {
 	router.POST("/plugins/upload", upload)
 	router.GET("/plugins/download/:pluginName", download)
+	router.GET("/plugins/info/:pluginName/*resource", info)
 
 	// folders
 	mkIfNotExist := func(path string) error {
