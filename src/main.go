@@ -7,7 +7,7 @@ import (
 	"server/db"
 	"server/homepage"
 	"server/login"
-	"server/plugin_upload"
+	"server/plugins"
 	"server/register"
 	"server/server"
 	"server/utils"
@@ -20,7 +20,7 @@ func main() {
 	homepage.Init(router)
 	login.Init(router)
 	register.Init(router)
-	plugin_upload.Init(router)
+	plugins.Init(router)
 
 	db.Init()
 	defer db.Close()

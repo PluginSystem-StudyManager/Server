@@ -2,9 +2,9 @@ build
 .idea
 
 # project specific
-plugins
 out
 dist
 node_modules
 .tscache
 package-lock.json
+/plugins/

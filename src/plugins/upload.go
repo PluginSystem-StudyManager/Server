@@ -1,4 +1,4 @@
-package plugin_upload
+package plugins
 
 import (
 	"archive/zip"
@@ -24,23 +24,6 @@ type PluginInfo struct {
 	Name             string `yaml:"name"`
 	ShortDescription string `yaml:"shortDescription"`
 	// TODO: Add all fields
-}
-
-func Init(router *httprouter.Router) {
-	router.POST("/plugins/upload", upload)
-
-	// folders
-	mkIfNotExist := func(path string) error {
-		if _, err := os.Stat(path); os.IsNotExist(err) {
-			return os.MkdirAll(path, os.ModeDir)
-		}
-		return nil
-	}
-	err := mkIfNotExist(pluginsPath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_ = mkIfNotExist(pluginsTmpPath)
 }
 
 // upload handles the upload request.
@@ -92,10 +75,6 @@ func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Para
 func uploadImpl(token string, pluginId string, fileContent []byte) error {
 	log.Printf("token: %s, pluginId: %s", token, pluginId)
 	// Authenticate
-	// TODO: check db or session
-	if len(token) == 0 {
-		return errors.New("not authenticated")
-	}
 	userId, err := db.UserIdByToken(token)
 	if err != nil {
 		log.Printf("Not authenticated: %v\n", err)
@@ -111,6 +90,7 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 		log.Printf("Error unzipping path \n")
 		return errors.New(fmt.Sprintf("zip: error unzipping: %s", err))
 	}
+	// TODO: validate correct uploaded files
 	// read plugin_info.yaml and add entry in db
 	infoFile := filepath.Join(pluginPath, "plugin_info.yaml")
 	data, err := ioutil.ReadFile(infoFile)
@@ -124,16 +104,25 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 		log.Println(err)
 		return err
 	}
-	err = db.AddPlugin(db.PluginData{
-		Name:             pluginInfo.Name,
-		ShortDescription: pluginInfo.ShortDescription,
-		Tags:             []string{},
-		UserIds:          []int{userId},
-	})
+	_, err = db.PluginIdByName(pluginInfo.Name)
 	if err != nil {
-		log.Printf("Error adding plugin to db: %v\n", err)
-		return err
+		// Add
+		err = db.AddPlugin(db.PluginData{
+			Name:             pluginInfo.Name,
+			ShortDescription: pluginInfo.ShortDescription,
+			Tags:             []string{},
+			UserIds:          []int{userId},
+		})
+		if err != nil {
+			// TODO: Delete upload?
+			log.Printf("Error adding plugin to db: %v\n", err)
+			return err
+		}
+	} else {
+		// Update
+		// TODO: update shortDescription, tags, ...
 	}
+
 	log.Printf("Successfully uploaded plugin: %s", pluginId)
 	return nil
 }

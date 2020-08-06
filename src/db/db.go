@@ -12,7 +12,7 @@ var db *sql.DB
 
 func Init() {
 	dbPath := "../dist/foo.db"
-	os.Remove(dbPath)
+	_ = os.Remove(dbPath)
 
 	dbLoc, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
@@ -120,6 +120,25 @@ func AddPlugin(data PluginData) error {
 		}
 	}
 	return nil
+}
+
+func PluginIdByName(name string) (int, error) {
+	rows, err := db.Query(`SELECT id FROM plugins WHERE name=?`, name)
+	if err != nil {
+		log.Fatal(err)
+		return -1, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id int
+		err = rows.Scan(&id)
+		if err != nil {
+			log.Fatal(err)
+			return -1, err
+		}
+		return id, nil
+	}
+	return -1, errors.New("no valid token found: " + name)
 }
 
 // Utils
