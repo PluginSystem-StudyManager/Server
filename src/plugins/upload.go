@@ -20,12 +20,6 @@ const (
 	pluginsTmpPath = "../plugins/tmp"
 )
 
-type PluginInfo struct {
-	Name             string `yaml:"name"`
-	ShortDescription string `yaml:"shortDescription"`
-	// TODO: Add all fields
-}
-
 // upload handles the upload request.
 // upload parses all data from the request.
 // The final logic is implemented in ``upload_impl()``
