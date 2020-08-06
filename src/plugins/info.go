@@ -6,7 +6,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
+	"server/utils"
 	"strings"
 	"text/template"
 )
@@ -42,6 +44,12 @@ func info(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 			log.Fatal(err)
 		}
 	default:
-		//
+		projectRes := utils.StaticFile("plugins/" + resourceName)
+		pluginRes := filepath.Join(pluginsPath, pluginName, resourceName)
+		if _, err := os.Stat(projectRes); !os.IsNotExist(err) {
+			http.ServeFile(w, r, projectRes)
+		} else {
+			http.ServeFile(w, r, pluginRes)
+		}
 	}
 }
