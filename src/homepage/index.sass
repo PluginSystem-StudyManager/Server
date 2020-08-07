@@ -9,6 +9,82 @@ body
 h2
   text-align: center
 
+//ContextMenu
+h1
+  text-align: center
+  text-transform: uppercase
+  color: white
+  background-color: #686868
+  width: 300px
+  border-radius: 10px
+  position: relative
+  top: -62px
+
+.absolute-center
+  position: relative
+  width: 300px
+  height: 8px
+  left: 35%
+
+ul
+  list-style-type: none
+  margin: 0
+  padding: 0
+  overflow: hidden
+  background-color: #333
+  width: 100%
+
+li
+  float: left
+  padding-bottom: 4px
+
+li a
+  display: block
+  color: white
+  text-align: center
+  padding: 14px 16px
+  text-decoration: none
+
+li a:hover:not(.active)
+  background-color: #111
+
+.dropbtn
+  background-color: #4CAF50
+  color: white
+  padding: 16px
+  font-size: 16px
+  border: none
+
+.dropdown
+  position: relative
+  display: inline-block
+  float: right
+  top: -50px
+
+.dropdown-content
+  display: none
+  position: absolute
+  background-color: #f1f1f1
+  min-width: 160px
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2)
+  z-index: 1
+
+
+.dropdown-content a
+  color: black
+  padding: 12px 16px
+  text-decoration: none
+  display: block
+
+.dropdown-content a:hover
+  background-color: #ddd
+
+.dropdown:hover .dropdown-content
+  display: block
+
+.dropdown:hover .dropbtn
+  background-color: #3e8e41
+
 
 // slideshow
 
@@ -103,6 +179,16 @@ h2
   background: #eee
   width: 50%
   height: 580px
+  position: relative
+  box-sizing: border-box
+
+.boxRight
+  float: left
+  padding: 20px
+  background: #eee
+  width: 50%
+  height: 580px
+  top: -21px
   position: relative
   box-sizing: border-box
 
