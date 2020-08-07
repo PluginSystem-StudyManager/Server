@@ -84,33 +84,35 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 		log.Printf("Error unzipping path (%v): %v -->%v\n", err, zipPath, pluginPath)
 		return errors.New(fmt.Sprintf("zip: error unzipping: %s", err))
 	}
+	failedUpload := func(err error, msg string) error {
+		log.Printf("%s (%v)", msg, err)
+		_ = os.RemoveAll(pluginPath)
+		return err
+	}
+
 	// TODO: validate correct uploaded files
 	// read plugin_info.yaml and add entry in db
 	infoFile := filepath.Join(pluginPath, "plugin_info.yaml")
 	data, err := ioutil.ReadFile(infoFile)
 	if err != nil {
-		log.Printf("Error reading file: \n" + infoFile)
-		return err
+		return failedUpload(err, "Error reading file: "+infoFile)
 	}
 	pluginInfo := PluginInfo{}
 	err = yaml.Unmarshal(data, &pluginInfo)
 	if err != nil {
-		log.Println(err)
-		return err
+		return failedUpload(err, "Error unmarshal: ")
 	}
-	_, err = db.PluginIdByName(pluginInfo.Name)
+	_, err = db.PluginIdByName(pluginId) // TODO: use Name from File or better ensure both are the same
 	if err != nil {
 		// Add
 		err = db.AddPlugin(db.PluginData{
-			Name:             pluginId, // TODO: use Name from File or better ensure both are the sane
+			Name:             pluginId, // TODO: use Name from File or better ensure both are the same
 			ShortDescription: pluginInfo.ShortDescription,
 			Tags:             []string{},
 			UserIds:          []int{userId},
 		})
 		if err != nil {
-			// TODO: Delete upload?
-			log.Printf("Error adding plugin to db: %v\n", err)
-			return err
+			return failedUpload(err, "Error adding plugin to db: ")
 		}
 	} else {
 		// Update
