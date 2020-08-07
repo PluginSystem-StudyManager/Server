@@ -1,8 +1,15 @@
-FROM golang:latest
+FROM golang:1.14
 
-WORKDIR /go/src/app
+WORKDIR /server
+ENV GOPATH /server
+ENV PATH=$PATH:$GOPATH/bin
+
 COPY . .
-RUN go get -d -v ./...
-RUN go install -v -/...
 
-CMD ["app"]
+WORKDIR /server/src
+RUN go get -d ./...
+RUN go install -v ./...
+
+EXPOSE 8080
+
+CMD ["server"]
