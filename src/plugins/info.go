@@ -28,7 +28,9 @@ func info(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		md := markdown.New(markdown.XHTMLOutput(true))
 		fileData, err := ioutil.ReadFile(filepath.Join(pluginsPath, pluginName, "README.md"))
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			w.WriteHeader(http.StatusNotFound)
+			_, _ = w.Write([]byte("Plugin not found")) // TODO: 404 not found page
 			return
 		}
 		body := md.RenderToString(fileData)

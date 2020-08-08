@@ -1,16 +1,26 @@
 extends ../web_lib/layout
 
 block goInit
-    :go:func TabInfo(body string, tabName string)
+    :go:func TabInfo(body string, pluginName string)
 
 block variables
-    - var title= 'Tab Info: ' + tabName
+    - var title= 'Tab Info: ' + pluginName
 
 append styles
-    link(rel='stylesheet', href='markdown.css')
-    link(rel='stylesheet', href='tab_info.css')
+    link(rel='stylesheet', href='dist/plugins/markdown.css')
+    link(rel='stylesheet', href='dist/plugins/tab_info.css')
+
+mixin attribute(key, value)
+    p
+        span.attributeKey #{key}:
+        span.attributeValue #{value}
 
 block content
+
+    .metaInfo
+        +attribute("Name", pluginName)
+        +attribute("Author", "TODO")
+        +attribute("Website", "TODO")
+
     - var riskyBusiness = body;
     .info !{riskyBusiness}
-
