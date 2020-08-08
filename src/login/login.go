@@ -13,5 +13,5 @@ func Init(router *httprouter.Router) {
 }
 
 func login(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	views.Login("Login", writer)
+	views.Login(writer)
 }

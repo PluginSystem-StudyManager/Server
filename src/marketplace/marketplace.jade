@@ -1,15 +1,16 @@
-:go:func Marketplace(pageTitle string, name string, plugins []PluginTemplate)
+extends ../web_lib/layout
 
-doctype html
-html(lang="en")
-    head
-        title= pageTitle
-    body
-        h1 Hello #{name}! You are amazing
-        ul
-            each plugin in plugins
-                li
-                    ul
-                        li= plugin.Name
-                        li= plugin.ShortDescription
+block goInit
+    :go:func Marketplace(plugins []PluginTemplateData)
 
+block variables
+    - var title= "Marketplace"
+
+append styles
+    link(rel='stylesheet', href='dist/marketplace/marketplace.css')
+
+block content
+    for plugin in plugins
+        .plugin
+            .name #{plugin.Name}
+            .description #{plugin.ShortDescription}

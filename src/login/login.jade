@@ -1,9 +1,10 @@
-
 extends ../web_lib/layout
 
-block header
-    :go:func Login(title string)
+block goInit
+    :go:func Login()
 
+block variables
+    - var title= "Login"
 
 append styles
     link(rel='stylesheet', href='dist/login/login.css')

@@ -14,10 +14,6 @@ func Init(router *httprouter.Router) {
 	router.GET("/marketplace", marketplace)
 }
 
-type allPluginsTemplate struct {
-	Plugins string
-}
-
 func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	_, err := db.ListPlugins()
 	if err != nil {
@@ -25,14 +21,13 @@ func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 	}
-	views.Marketplace("Marketplace", "Lukas", []views.PluginTemplate{{
-		Name:             "MyPLugin",
-		ShortDescription: "Some dsc",
-		Preview:          "",
-	},
+	views.Marketplace([]views.PluginTemplateData{
+		{
+			Name:             "MyPLugin",
+			ShortDescription: "Some dsc",
+		},
 		{
 			Name:             "Anpother plugin",
 			ShortDescription: "Some other description",
-			Preview:          "",
 		}}, w)
 }

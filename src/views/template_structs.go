@@ -1,7 +1,6 @@
 package views
 
-type PluginTemplate struct {
+type PluginTemplateData struct {
 	Name             string
 	ShortDescription string
-	Preview          string
 }
