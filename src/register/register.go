@@ -1,9 +1,11 @@
 package register
 
+//go:generate jade -pkg=views -writer -d ../views register.jade
+
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
-	"server/utils"
+	"server/views"
 )
 
 func Init(router *httprouter.Router) {
@@ -11,5 +13,5 @@ func Init(router *httprouter.Router) {
 }
 
 func register(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	http.ServeFile(writer, request, utils.StaticFile("register/register.html"))
+	views.Register(writer)
 }

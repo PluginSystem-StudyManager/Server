@@ -9,9 +9,29 @@ html(theme="dark")
     head
         title= title
         block styles
+            link(rel='stylesheet', href='dist/web_lib/stylesheets/menu.css')
+            link(rel='stylesheet', href='dist/web_lib/stylesheets/body.css')
 
     body
         block header
+            // Navigation Menü .......
+            ul
+                li
+                    a(href='/') Home
+                li
+                    a(href='#news') News
+                li
+                    a(href='#contact') Contact
+            .dropdown
+                button.dropbtn User Account
+                .dropdown-content
+                    a(href='/login') Login
+                    a(href='/profile') Account
+                    a(href='#') Edit Plugins
+                    a(href='#') Einstellungen
+            .absolute-center
+                h1 Study Manager
+
 
         block content
 

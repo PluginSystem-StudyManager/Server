@@ -1,0 +1,53 @@
+extends ../web_lib/layout
+
+block goInit
+    :go:func Profile(username string)
+
+block variables
+    - var title= "Login"
+
+append styles
+    link(rel='stylesheet', href='dist/profile/profile.css')
+
+append scripts
+    script(src="/dist/profile/profile.js")
+
+block content
+    .Position
+        // Diverent SubSides.......
+        div
+            button.logbtn(onclick='Plugins()') Your Plugins
+        div
+            button.logbtn(onclick='AccountSettins()') Account Settings
+    #Plugin.Plugins
+        | Plugins
+    #Account.Account
+        .box.boxHeading.boxSpalte
+            div Account Information
+            .distance User Information
+            .distance Change Passwort
+        .box.boxSpalte
+            .entry User Name
+            .entry Passwort
+            .entry Account erstellt
+            .entry.entryNewSection Vorname
+            .entry Nachname
+            .entry.entryNewSection2 Altes Passwort
+            .entry neues Passwort
+            .entry neues Passwort Wiederholen
+        .box.boxRight.boxSpalte
+            .entry Julian Soboot
+            .entry **********
+            .entry 08.08.2020
+            .entry.entryNewSection Julian
+            .entry Soboot
+            form(action='/...')
+                .txtb.txtbNewSection
+                    input.plHolder(type='password' placeholder='********')
+                .txtb
+                    input.plHolder(type='password' placeholder='********')
+                .txtb
+                    input.plHolder(type='password' placeholder='********')
+                div
+                    button.logbtn.btnFormular(type='submit') Passwort &auml;ndern
+

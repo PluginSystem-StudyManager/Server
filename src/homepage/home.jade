@@ -1,0 +1,78 @@
+extends ../web_lib/layout
+
+block goInit
+    :go:func Homepage()
+
+block variables
+    - var title= "Homepage"
+
+append styles
+    link(rel='stylesheet', href='dist/homepage/home.css')
+
+append scripts
+    script(src="/dist/homepage/home.js")
+
+
+block content
+    // Desktop Application Abschnitt
+    .box
+        h2 Desktop Applikation
+        .slideshow-container
+            // Full-width images with number and caption text
+            .mySlides.fade
+                img(src='/dist/res/JavaApplication.png' style='width:100%; height:400px')
+                .text Plugin Verwaltung
+            .mySlides.fade
+                img(src='/dist/res/TutorialBSP.jpg' style='width:100%; height:400px ')
+                .text WebView
+            // Next and previous buttons
+            a.prev(onclick='plusSlides(-1)') &#x276E;
+            a.next(onclick='plusSlides(1)') &#x276F;
+        br
+        br
+        button.downbtn Download Study Manager
+    .boxRight
+        h2 User Guide
+        .descriptionText
+            | Brauchen sie hilfe bei mit der Applikation? Hier finden Sie eine Anleitungen zu den
+            | verschiedenen Funktionen des Study Manager.
+        br
+        div
+            img.imagePhoto(src='/dist/res/TutorialBSP.jpg')
+        br
+        br
+        button.downbtn zum User Guide
+    // Plugin Abschnitt
+    .boxPlugins.box
+        h2 Plugins
+        br
+        .plugins
+            .pluginImage
+                img(src='/dist/res/desktop-96.png' height='100' width='100')
+            .pluginImage
+                img(src='/dist/res/desktop-96.png' height='100' width='100')
+            .pluginImage
+                img(src='/dist/res/desktop-96.png' height='100' width='100')
+            .pluginImage
+                img(src='/dist/res/desktop-96.png' height='100' width='100')
+        br
+        br
+        br
+        button.downbtn zur Plugin &Uuml;bersicht
+    .boxPlugins.boxPluginMiddle
+        h2 Plugin Suche
+        br
+        br
+        br
+        .container
+            .container__item
+                form.form
+                    input.form__field(type='input' placeholder='search term')
+                    button.btn.btn--primary.btn--inside(type='button') Search
+    // Developer Guide Abschnitt
+    .boxDeveloper
+        img.CENTERPhoto(src='/dist/res/Quellcode_Image.jpg')
+    .boxDeveloper.boxDeveloperMiddle
+        h2 Dev Guide
+    .boxDeveloper
+        h2 Example Dev Guide

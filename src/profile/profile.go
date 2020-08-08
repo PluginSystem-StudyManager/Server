@@ -1,9 +1,11 @@
 package profile
 
+//go:generate jade -pkg=views -writer -d ../views profile.jade
+
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
-	"server/utils"
+	"server/views"
 )
 
 func Init(router *httprouter.Router) {
@@ -11,5 +13,7 @@ func Init(router *httprouter.Router) {
 }
 
 func register(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	http.ServeFile(writer, request, utils.StaticFile("profile/profile.html"))
+
+	name := "Hans Wurst"
+	views.Profile(name, writer)
 }

@@ -2,6 +2,9 @@ package main
 
 //go:generate go generate server/marketplace
 //go:generate go generate server/login
+//go:generate go generate server/profile
+//go:generate go generate server/register
+//go:generate go generate server/homepage
 
 import (
 	"github.com/julienschmidt/httprouter"
