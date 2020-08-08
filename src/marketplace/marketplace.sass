@@ -1,11 +1,25 @@
+@import "../web_lib/stylesheets/color_themes"
+
 .plugin
-  border: 2px solid red
+  border: 2px solid var(--color-border-default)
   width: 250px
   float: left
   margin: 20px
-  padding: 5px
+  color: var(--color-font-default)
+  background: var(--color-elevation-10)
+  text-decoration: none
+  box-shadow: var(--box-shadow-default)
+
+  &:hover
+    border: 2px solid var(--color-border-weaken)
+    cursor: pointer
+
+  &:active
+    color: var(--color-font-default)
+    background: var(--color-elevation-20)
 
   .title
+    padding: 10px
     height: 32px
 
     .icon
@@ -23,8 +37,9 @@
       width: calc(100% - 32px)
       text-align: center
   .description
-    border-top: 2px solid black
-    border-bottom: 2px solid black
+    border-top: 1px solid rgba(107, 103, 103, 0.5)
+    border-bottom: 2px solid rgba(107, 103, 103, 0.5)
+    padding: 10px
 
   .preview
     img

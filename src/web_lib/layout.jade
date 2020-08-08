@@ -14,25 +14,30 @@ html(theme="dark")
 
     body
         block header
-            // Navigation Menü .......
-            ul
-                li
-                    a(href='/') Home
-                li
-                    a(href='#news') News
-                li
-                    a(href='#contact') Contact
-            .dropdown
-                button.dropbtn User Account
-                .dropdown-content
-                    a(href='/login') Login
-                    a(href='/profile') Account
-                    a(href='#') Edit Plugins
-                    a(href='#') Einstellungen
-            .absolute-center
-                h1 Study Manager
+            header
+                .header
+                    ul
+                        li
+                            a(href='/') Home
+                        li
+                            a(href='#news') News
+                        li
+                            a(href='#contact') Contact
 
 
-        block content
+                    .absolute-center
+                        h1 Study Manager
+
+                    .dropdown
+                        button.dropbtn User Account
+                        .dropdown-content
+                            a(href='/login') Login
+                            a(href='/profile') Account
+                            a(href='#') Edit Plugins
+                            a(href='#') Settings
+
+
+        .content
+            block content
 
         block scripts
