@@ -12,5 +12,10 @@ append styles
 block content
     for plugin in plugins
         .plugin
-            .name #{plugin.Name}
+            .title
+                .icon
+                    img(src='/plugins/info/' + plugin.Name + '/img/icon.png')
+                .name #{plugin.Name}
             .description #{plugin.ShortDescription}
+            .preview
+                img(src='/plugins/info/' + plugin.Name + '/img/preview/preview_1.jpg')

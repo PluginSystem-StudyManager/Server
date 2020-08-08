@@ -15,19 +15,19 @@ func Init(router *httprouter.Router) {
 }
 
 func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	_, err := db.ListPlugins()
+	plugins, err := db.ListPlugins()
 	if err != nil {
 		log.Printf("%v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 	}
-	views.Marketplace([]views.PluginTemplateData{
-		{
-			Name:             "MyPLugin",
-			ShortDescription: "Some dsc",
-		},
-		{
-			Name:             "Anpother plugin",
-			ShortDescription: "Some other description",
-		}}, w)
+	var pluginsTemplateDate []views.PluginTemplateData
+	for _, plugin := range plugins {
+		pluginsTemplateDate = append(pluginsTemplateDate, views.PluginTemplateData{
+			Name:             plugin.Name,
+			ShortDescription: plugin.ShortDescription,
+		})
+	}
+
+	views.Marketplace(pluginsTemplateDate, w)
 }
