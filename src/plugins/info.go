@@ -1,5 +1,7 @@
 package plugins
 
+//go:generate jade -pkg=views -writer -d ../views tab_info.jade
+
 import (
 	"github.com/julienschmidt/httprouter"
 	"gitlab.com/golang-commonmark/markdown"
@@ -9,8 +11,8 @@ import (
 	"os"
 	"path/filepath"
 	"server/utils"
+	"server/views"
 	"strings"
-	"text/template"
 )
 
 type tabInfoTemplate struct {
@@ -30,26 +32,18 @@ func info(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 			return
 		}
 		body := md.RenderToString(fileData)
-		data := tabInfoTemplate{
-			Name: pluginName,
-			Body: body,
-		}
-		var t *template.Template
-		t, err = template.ParseFiles("plugins/tab_info.html")
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = t.ExecuteTemplate(w, "tab_info.html", data)
-		if err != nil {
-			log.Fatal(err)
-		}
+		views.TabInfo(body, pluginName, w)
 	default:
-		projectRes := utils.StaticFile("plugins/" + resourceName)
-		pluginRes := filepath.Join(pluginsPath, pluginName, resourceName)
-		if _, err := os.Stat(projectRes); !os.IsNotExist(err) {
-			http.ServeFile(w, r, projectRes)
+		if strings.HasPrefix(resourceName, "dist") {
+			http.ServeFile(w, r, "../"+resourceName)
 		} else {
-			http.ServeFile(w, r, pluginRes)
+			projectRes := utils.StaticFile("plugins/" + resourceName)
+			pluginRes := filepath.Join(pluginsPath, pluginName, resourceName)
+			if _, err := os.Stat(projectRes); !os.IsNotExist(err) {
+				http.ServeFile(w, r, projectRes)
+			} else {
+				http.ServeFile(w, r, pluginRes)
+			}
 		}
 	}
 }
