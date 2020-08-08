@@ -7,7 +7,10 @@ Plugins can be uploaded via a zip file. This file contains:
 - Files needed for marketplace
     - README
     - files referenced in README
-
+- img
+    - preview
+        - img files
+    - icon.png
 
 ## Plugin info file
 

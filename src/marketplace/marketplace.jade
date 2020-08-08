@@ -1,0 +1,16 @@
+extends ../web_lib/layout
+
+block goInit
+    :go:func Marketplace(plugins []PluginTemplateData)
+
+block variables
+    - var title= "Marketplace"
+
+append styles
+    link(rel='stylesheet', href='dist/marketplace/marketplace.css')
+
+block content
+    for plugin in plugins
+        .plugin
+            .name #{plugin.Name}
+            .description #{plugin.ShortDescription}
