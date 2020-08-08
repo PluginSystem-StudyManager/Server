@@ -29,3 +29,18 @@ sudo docker build -t server:1.0 .
 
 # run
 sudo docker run --name server -d -p 8080:8080 -it server:1.0
+
+# setup nginx
+# TODO uncomment and fix if needed
+#sudo echo """
+#server {
+#        listen 9090;
+#        listen [::]:9090;
+#
+#        location / {
+#                proxy_pass http://127.0.0.1:8080;
+#        }
+#}
+#""" | sudo tee /etc/nginx/sites-available/study_tool
+#
+#sudo systemctl restart nginx
