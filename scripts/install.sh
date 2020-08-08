@@ -20,11 +20,12 @@ sudo apt-get -y install docker-ce docker-ce-cli containerd.io
 # clone repository
 cd ~
 mkdir StudyTool
+cd StudyTool
 git clone https://github.com/PluginSystem-StudyManager/Server
-cd StudyTool/Server
+cd Server
 
 # create Docker container
-docker build -t server:1.0 .
+sudo docker build -t server:1.0 .
 
 # run
-docker run --name server -d -p 8080:8080 -it server:1.0
+sudo docker run --name server -d -p 8080:8080 -it server:1.0
