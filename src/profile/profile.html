@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" theme="dark
+">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,21 +8,44 @@
     <script language="javascript" type="text/javascript" src="/dist/profile/profile.js"></script>
 </head>
 <body>
-<div class="Position">
-    <div>
-        <button class="logbtn" onclick="Plugins()">Your Plugins</button>
-    </div>
-    <div>
-        <button class="logbtn" onclick="AccountSettins()">Account Settings</button>
-    </div>
-</div>
 
-<div id="Plugin" class="Plugins">
-    Plugins
-</div>
+<!-- Navigation Menü ....... -->
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="dropdown">
+        <button class="dropbtn">User Account</button>
+        <div class="dropdown-content">
+            <a href="/login">Login</a>
+            <a href="/profile">Account</a>
+            <a href="#">Edit Plugins</a>
+            <a href="#">Einstellungen</a>
+        </div>
+    </div>
 
-<div id="Account" class="Account">
-    Account
-</div>
+    <div class="absolute-center">
+        <h1>Study Manager </h1>
+    </div>
+
+    <div class="Position">
+        <!-- Diverent SubSides....... -->
+
+        <div>
+            <button class="logbtn" onclick="Plugins()">Your Plugins</button>
+        </div>
+        <div>
+            <button class="logbtn" onclick="AccountSettins()">Account Settings</button>
+        </div>
+    </div>
+
+    <div id="Plugin" class="Plugins">
+        Plugins
+    </div>
+
+    <div id="Account" class="Account">
+        Account
+    </div>
 </body>
 </html>
