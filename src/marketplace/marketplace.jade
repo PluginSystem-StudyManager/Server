@@ -1,0 +1,15 @@
+:go:func Marketplace(pageTitle string, name string, plugins []PluginTemplate)
+
+doctype html
+html(lang="en")
+    head
+        title= pageTitle
+    body
+        h1 Hello #{name}! You are amazing
+        ul
+            each plugin in plugins
+                li
+                    ul
+                        li= plugin.Name
+                        li= plugin.ShortDescription
+

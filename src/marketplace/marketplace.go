@@ -1,22 +1,17 @@
 package marketplace
 
-//go:generate jade -pkg=marketplace -writer hello.jade
+//go:generate jade -pkg=views -writer -d ../views marketplace.jade
 
 import (
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"server/db"
+	"server/views"
 )
 
 func Init(router *httprouter.Router) {
 	router.GET("/marketplace", marketplace)
-}
-
-type pluginTemplate struct {
-	Name             string
-	ShortDescription string
-	Preview          string
 }
 
 type allPluginsTemplate struct {
@@ -30,5 +25,14 @@ func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(err.Error()))
 	}
-	Index("Hello", "Hello", w)
+	views.Marketplace("Marketplace", "Lukas", []views.PluginTemplate{{
+		Name:             "MyPLugin",
+		ShortDescription: "Some dsc",
+		Preview:          "",
+	},
+		{
+			Name:             "Anpother plugin",
+			ShortDescription: "Some other description",
+			Preview:          "",
+		}}, w)
 }
