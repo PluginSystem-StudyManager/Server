@@ -1,19 +1,17 @@
 FROM alpine:latest
 
 RUN apk add --no-cache git go npm
-RUN go get github.com/Joker/jade/cmd/jade
 
 WORKDIR /server
+ENV GOBIN /server/bin
+RUN go get github.com/Joker/jade/cmd/jade
 ENV GOPATH /server
-ENV GOROOT /bin
 ENV PATH=$PATH:$GOPATH/bin
 
 COPY . .
 
-#RUN npm install
-#RUN npm run grunt
-
-RUN printenv
+RUN npm install
+RUN npm run grunt
 
 WORKDIR /server/src
 RUN go get -d ./...
