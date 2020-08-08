@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="start" type="CompoundRunConfigurationType">
+    <toRun name="watch" type="js.build_tools.grunt" />
     <toRun name="go build server" type="GoApplicationRunConfiguration" />
     <toRun name="build" type="js.build_tools.grunt" />
-    <toRun name="watch" type="js.build_tools.grunt" />
     <method v="2" />
   </configuration>
 </component>
