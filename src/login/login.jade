@@ -1,0 +1,21 @@
+
+extends ../web_lib/layout
+
+block header
+    :go:func Login(title string)
+
+
+append styles
+    link(rel='stylesheet', href='dist/login/login.css')
+
+block content
+    form.login-form
+        h1  Login
+        .txtb
+            input#userName(type='text' placeholder='Username')
+        .txtb
+            input#UserPassword(type='password' placeholder='password')
+        button.logbtn(type='submit') Login
+        .bottom-text
+            | Don't have account?
+            a(href='/register') Sign up

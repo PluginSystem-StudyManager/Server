@@ -1,8 +1,11 @@
 package login
 
+//go:generate jade -pkg=views -writer -d ../views login.jade
+
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"server/views"
 )
 
 func Init(router *httprouter.Router) {
@@ -10,5 +13,5 @@ func Init(router *httprouter.Router) {
 }
 
 func login(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	http.ServeFile(writer, request, "login/login.html")
+	views.Login("Login", writer)
 }

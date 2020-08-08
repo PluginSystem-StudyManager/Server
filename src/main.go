@@ -1,6 +1,7 @@
 package main
 
 //go:generate go generate server/marketplace
+//go:generate go generate server/login
 
 import (
 	"github.com/julienschmidt/httprouter"
