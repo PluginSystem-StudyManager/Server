@@ -13,6 +13,16 @@ func Init(router *httprouter.Router) {
 	router.GET("/marketplace", marketplace)
 }
 
+type pluginTemplate struct {
+	Name             string
+	ShortDescription string
+	Preview          string
+}
+
+type allPluginsTemplate struct {
+	Plugins string
+}
+
 func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	plugins, err := db.ListPlugins()
 	if err != nil {
@@ -28,14 +38,17 @@ func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	var buffer bytes.Buffer
 	for _, plugin := range plugins {
-		err = t.ExecuteTemplate(&buffer, "template_pluginPreview.html", plugin)
+		templateData := pluginTemplate{
+			Name:             plugin.Name,
+			ShortDescription: plugin.ShortDescription,
+			Preview:          "",
+		}
+		err = t.ExecuteTemplate(&buffer, "template_pluginPreview.html", templateData)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-	data := struct {
-		Plugins string
-	}{Plugins: string(buffer.Bytes())}
+	data := allPluginsTemplate{Plugins: string(buffer.Bytes())}
 	var allPluginsBuffer bytes.Buffer
 	err = t.ExecuteTemplate(&allPluginsBuffer, "template_allPluginsPreview.html", data)
 	if err != nil {
