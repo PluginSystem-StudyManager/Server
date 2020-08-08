@@ -6,6 +6,8 @@
     <filePath value="$PROJECT_DIR$/src/main.go" />
     <package value="server" />
     <directory value="$PROJECT_DIR$" />
-    <method v="2" />
+    <method v="2">
+      <option name="GoBeforeRunTask" command="generate" />
+    </method>
   </configuration>
 </component>
