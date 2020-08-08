@@ -1,76 +1,88 @@
+@import "color_themes"
 
-h1
-  text-align: center
-  text-transform: uppercase
-  color: white
-  background-color: #686868
-  width: 300px
-  border-radius: 10px
-  position: relative
-  top: -62px
+$menu_height: 60px
 
-.absolute-center
-  position: relative
-  width: 300px
-  height: 8px
-  left: 35%
+header
+  background: var(--color-elevation-10)
+  height: $menu_height
 
-ul
-  list-style-type: none
-  margin: 0
-  padding: 0
-  overflow: hidden
-  background-color: #333
-  width: 100%
+  .header
+    max-width: 1280px
+    margin-left: auto
+    margin-right: auto
+    display: flex
 
-li
-  float: left
-  padding-bottom: 4px
+    .absolute-center
+      margin: 0 auto
 
-li a
-  display: block
-  color: white
-  text-align: center
-  padding: 14px 16px
-  text-decoration: none
-
-li a:hover:not(.active)
-  background-color: #111
-
-.dropbtn
-  background-color: #4CAF50
-  color: white
-  padding: 16px
-  font-size: 16px
-  border: none
-
-.dropdown
-  position: relative
-  display: inline-block
-  float: right
-  top: -50px
-
-.dropdown-content
-  display: none
-  position: absolute
-  background-color: #f1f1f1
-  min-width: 160px
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2)
-  z-index: 1
+    h1
+      text-align: center
+      text-transform: uppercase
+      color: white
+      border-radius: 10px
+      font-size: $menu_height - 10px
+      margin: 0
 
 
-.dropdown-content a
-  color: black
-  padding: 12px 16px
-  text-decoration: none
-  display: block
+    ul
+      list-style-type: none
+      margin: 0
+      padding: 0
+      overflow: hidden
+      height: $menu_height
 
-.dropdown-content a:hover
-  background-color: #ddd
+    li
+      float: left
+      height: 100%
 
-.dropdown:hover .dropdown-content
-  display: block
+      a
+        display: block
+        color: white
+        text-align: center
+        line-height: $menu_height
+        text-decoration: none
+        height: 100%
+        padding: 0 10px
 
-.dropdown:hover .dropbtn
-  background-color: #3e8e41
+        &:hover:not(.active)
+          background-color: var(--color-button-hover)
 
+    .dropdown
+      position: relative
+      display: inline-block
+      float: right
+      height: $menu_height
+
+      &:hover
+        .dropdown-content
+          display: block
+        .dropbtn
+          background-color: var(--color-button-hover)
+
+      .dropbtn
+        background-color: var(--color-button-default)
+        color: white
+        padding: 16px
+        font-size: 16px
+        border: none
+        height: 100%
+
+    .dropdown-content
+      display: none
+      position: absolute
+      background-color: #f1f1f1
+      min-width: 160px
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2)
+      z-index: 1
+
+
+
+    .dropdown-content
+      a
+        color: black
+        padding: 12px 16px
+        text-decoration: none
+        display: block
+
+        &:hover
+          background-color: #ddd
