@@ -18,6 +18,9 @@ func main() {
 	router := httprouter.New()
 	router.GET("/dist/*filepath", serveStatic)
 
+	router.GET("/test", func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+		writer.Write([]byte("Test"))
+	})
 	homepage.Init(router)
 	login.Init(router)
 	register.Init(router)
