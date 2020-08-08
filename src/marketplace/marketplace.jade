@@ -11,7 +11,7 @@ append styles
 
 block content
     for plugin in plugins
-        .plugin
+        a.plugin(href='/plugins/info/' + plugin.Name + "/html")
             .title
                 .icon
                     img(src='/plugins/info/' + plugin.Name + '/img/icon.png')
