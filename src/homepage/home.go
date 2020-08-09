@@ -9,9 +9,9 @@ import (
 )
 
 func Init(router *httprouter.Router) {
-	router.GET("/", home)
+	router.GET("/", Home)
 }
 
-func home(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+func Home(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	views.Homepage(writer)
 }

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"server/db"
+	"server/homepage"
 	"server/views"
 )
 
@@ -23,13 +25,20 @@ func userLogin(writer http.ResponseWriter, request *http.Request, params httprou
 	fmt.Printf("Funktion wird aufgerufen\n")
 
 	request.ParseForm()
-	user := request.Form.Get("userName")
-	pw := request.Form.Get("UserPassword")
+	user := request.Form.Get("username")
+	pw := request.Form.Get("password")
 
-	fmt.Fprintf(writer, "User = %s\n", user)
-	fmt.Fprintf(writer, "Passwort = %s\n", pw)
+	success, err := db.CheckCredentials(user, pw)
 
-	fmt.Println("username:", request.Form["userName"])
-	fmt.Println("password:", request.Form["UserPassword"])
+	if err != nil {
+
+	}
+
+	if !success {
+		writer.WriteHeader(http.StatusUnauthorized)
+	}
+	if success {
+		homepage.Home(writer, request, params)
+	}
 
 }

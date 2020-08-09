@@ -10,6 +10,32 @@ func AddUser(username string, password string) (sql.Result, error) {
 	return insert("INSERT INTO users(username, password) values (?, ?)", username, password)
 }
 
+func CheckCredentials(username string, password string) (bool, error) {
+
+	rows, err := db.Query(`SELECT username, password FROM users where  username=? AND password=?`, username, password)
+	if err != nil {
+		log.Printf("Query Error: %v", err)
+		return false, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+
+		var uName string
+		var pw string
+
+		err := rows.Scan(&uName, &pw)
+		if err != nil {
+			log.Printf("Query Error: %v", err)
+			return false, err
+		}
+		if username == uName && password == pw {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
 func UpdateToken(username string, token string, ttl string) (sql.Result, error) {
 	return insert(`UPDATE users SET token=?, token_ttl=? WHERE username=?`, token, ttl, username)
 }
