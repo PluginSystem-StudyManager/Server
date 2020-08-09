@@ -5,6 +5,7 @@ package homepage
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"server/db"
 	"server/plugins"
 	"server/views"
 )
@@ -18,12 +19,7 @@ func Init(router *httprouter.Router) {
 }
 
 func Home(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	pluginsTemplateData, err := plugins.ListTemplateData("")
-	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
-		views.Homepage([]views.PluginTemplateData{}, writer)
-		return
-	}
+	pluginsTemplateData := plugins.DbDataToTemplateData(db.ListPlugins())
 
 	locNumPlugins := numPluginsPreview
 	if locNumPlugins > len(pluginsTemplateData) {

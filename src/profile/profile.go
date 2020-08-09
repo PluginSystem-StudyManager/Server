@@ -5,6 +5,7 @@ package profile
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"server/db"
 	"server/plugins"
 	"server/views"
 )
@@ -14,10 +15,8 @@ func Init(router *httprouter.Router) {
 }
 
 func profile(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	pluginsData, err := plugins.ListTemplateData("")
-	if err != nil {
-		pluginsData = []views.PluginTemplateData{}
-	}
+	username := "Walter" // TODO: get from Cookie
+	pluginsData := plugins.DbDataToTemplateData(db.ListPluginsByUser(username))
 	name := "Hans Wurst"
 	views.Profile(name, pluginsData, writer)
 }

@@ -56,18 +56,31 @@ func PluginIdByName(name string) (int, error) {
 }
 
 func ListPlugins() ([]PluginData, error) {
-	return listPluginsWhere("")
+	return listPluginsQuery(`
+	SELECT name, shortDescription
+	FROM plugins
+	`)
 }
 
 func ListPluginsSearch(value string) ([]PluginData, error) {
-	return listPluginsWhere("WHERE UPPER(name) LIKE UPPER('%" + value + "%') OR UPPER(shortDescription) LIKE UPPER('%" + value + "%')")
+	return listPluginsQuery(`
+	SELECT name, shortDescription
+	FROM plugins
+	WHERE UPPER(name) LIKE UPPER('%` + value + `%') OR UPPER(shortDescription) LIKE UPPER('%` + value + `%')`)
 }
 
-func listPluginsWhere(where string) ([]PluginData, error) {
-	rows, err := db.Query(`
-	SELECT name, shortDescription
-	FROM plugins 
-	` + where + ";")
+func ListPluginsByUser(username string) ([]PluginData, error) {
+	return listPluginsQuery(`
+		SELECT name, shortDescription
+		FROM plugins
+			JOIN user_plugins up on plugins.id = up.plugin
+			JOIN users u on up.user = u.id
+		WHERE username=?
+		`, username)
+}
+
+func listPluginsQuery(query string, args ...interface{}) ([]PluginData, error) {
+	rows, err := db.Query(query, args...)
 	if err != nil {
 		log.Fatal(err)
 		return nil, err

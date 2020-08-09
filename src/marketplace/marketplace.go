@@ -5,6 +5,7 @@ package marketplace
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"server/db"
 	"server/plugins"
 	"server/views"
 )
@@ -16,11 +17,6 @@ func Init(router *httprouter.Router) {
 func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	_ = r.ParseForm()
 	search := r.Form.Get("search")
-	pluginsTemplateData, err := plugins.ListTemplateData(search)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		views.Marketplace([]views.PluginTemplateData{}, search, w)
-		return
-	}
+	pluginsTemplateData := plugins.DbDataToTemplateData(db.ListPluginsSearch(search))
 	views.Marketplace(pluginsTemplateData, search, w)
 }

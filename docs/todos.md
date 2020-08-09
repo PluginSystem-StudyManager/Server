@@ -5,7 +5,6 @@
     - Save in db
     - send to user
     - Check for every request -> Adjust menu
-- Profile Show plugins
 - yottaDb on linux
 - preview images plugins
 - homepage add links to sub pages
