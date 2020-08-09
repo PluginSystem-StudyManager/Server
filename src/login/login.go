@@ -31,14 +31,14 @@ func userLogin(writer http.ResponseWriter, request *http.Request, params httprou
 	success, err := db.CheckCredentials(user, pw)
 
 	if err != nil {
-
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	if !success {
 		writer.WriteHeader(http.StatusUnauthorized)
-	}
-	if success {
+
+	} else {
 		homepage.Home(writer, request, params)
 	}
-
 }
