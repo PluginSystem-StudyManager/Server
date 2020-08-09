@@ -10,7 +10,7 @@ function checkCredentials(form: HTMLFormElement) {
             console.log(response)
             if (response.ok) {
 
-                window.location.assign("/test")
+                window.location.assign("/")
 
             } else {
                 let errorField = document.getElementById("errorMessage")
