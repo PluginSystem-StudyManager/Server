@@ -69,9 +69,9 @@ block content
         br
         .container
             .container__item
-                form.form
-                    input.form__field(type='input' placeholder='search term')
-                    button.btn.btn--primary.btn--inside(type='button') Search
+                form.form(action="/marketplace" method="GET")
+                    input.form__field(type='text' placeholder='search term' name="search")
+                    input.btn.btn--primary.btn--inside(type='submit' value="Search")
     // Developer Guide Abschnitt
     .boxDeveloper
         img.CENTERPhoto(src='/dist/res/Quellcode_Image.jpg')

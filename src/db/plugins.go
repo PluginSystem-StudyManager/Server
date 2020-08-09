@@ -56,10 +56,18 @@ func PluginIdByName(name string) (int, error) {
 }
 
 func ListPlugins() ([]PluginData, error) {
+	return listPluginsWhere("")
+}
+
+func ListPluginsSearch(value string) ([]PluginData, error) {
+	return listPluginsWhere("WHERE UPPER(name) LIKE UPPER('%" + value + "%') OR UPPER(shortDescription) LIKE UPPER('%" + value + "%')")
+}
+
+func listPluginsWhere(where string) ([]PluginData, error) {
 	rows, err := db.Query(`
 	SELECT name, shortDescription
-	FROM plugins
-	`)
+	FROM plugins 
+	` + where + ";")
 	if err != nil {
 		log.Fatal(err)
 		return nil, err

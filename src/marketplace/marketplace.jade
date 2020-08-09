@@ -1,7 +1,7 @@
 extends ../web_lib/layout
 
 block goInit
-    :go:func Marketplace(plugins []PluginTemplateData)
+    :go:func Marketplace(plugins []PluginTemplateData, searchValue string)
 
 block variables
     - var title= "Marketplace"
@@ -10,6 +10,13 @@ append styles
     link(rel='stylesheet', href='dist/marketplace/marketplace.css')
 
 block content
+
+    .search
+        form(action="/marketplace" method="GET")
+            input(type="text" placeholder="name, author, tag, ..." name="search", value=searchValue)
+            //- TODO: Replace with icon
+            input.btn(type="submit" value="Search")
+
     for plugin in plugins
         a.plugin(href='/plugins/info/' + plugin.Name + "/html")
             .title
