@@ -9,6 +9,10 @@ import (
 	"server/views"
 )
 
+const (
+	numPluginsPreview = 4 // How many plugins are shown in the homepage
+)
+
 func Init(router *httprouter.Router) {
 	router.GET("/", Home)
 }
@@ -20,5 +24,10 @@ func Home(writer http.ResponseWriter, request *http.Request, _ httprouter.Params
 		views.Homepage([]views.PluginTemplateData{}, writer)
 		return
 	}
-	views.Homepage(pluginsTemplateData, writer)
+
+	locNumPlugins := numPluginsPreview
+	if locNumPlugins > len(pluginsTemplateData) {
+		locNumPlugins = len(pluginsTemplateData)
+	}
+	views.Homepage(pluginsTemplateData[:locNumPlugins], writer)
 }
