@@ -10,13 +10,14 @@ append styles
     link(rel='stylesheet', href='dist/login/login.css')
 
 block content
-    form.login-form
+    form.login-form(method='post' action='/userLogin')
         h1  Login
         .txtb
-            input#userName(type='text' placeholder='Username')
+            input(name='userName' type='text' placeholder='Username')
         .txtb
-            input#UserPassword(type='password' placeholder='password')
+            input(name='UserPassword' type='password' placeholder='password')
         button.logbtn(type='submit') Login
         .bottom-text
-            | Don't have account?
+            | Don&apos;t have account?
             a(href='/register') Sign up
+
