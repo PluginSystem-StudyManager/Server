@@ -6,12 +6,14 @@ package main
 //go:generate go generate server/register
 //go:generate go generate server/homepage
 //go:generate go generate server/plugins
+//go:generate go generate server/downloadApplication
 
 import (
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"server/db"
+	"server/downloadApplication"
 	"server/homepage"
 	"server/login"
 	"server/marketplace"
@@ -35,6 +37,7 @@ func main() {
 	plugins.Init(router)
 	marketplace.Init(router)
 	profile.Init(router)
+	downloadApplication.Init(router)
 
 	db.Init()
 	defer db.Close()
