@@ -1,10 +1,9 @@
 function checkCredentials(form: HTMLFormElement) {
-
     let data = new FormData(form)
 
     fetch("/userLogin", {
         body: data,
-        method: "Post"
+        method: "POST"
     })
         .then(response => {
             console.log(response)
@@ -13,7 +12,7 @@ function checkCredentials(form: HTMLFormElement) {
                 window.location.assign("/test")
 
             } else {
-                let errorField = document.getElementById("ErrorMessage")
+                let errorField = document.getElementById("errorMessage")
 
                 if (response.status == 401) {  // Unauthorized User
                     errorField.innerText = "Username / Password is wrong"

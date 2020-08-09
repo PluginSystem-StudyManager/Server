@@ -3,11 +3,9 @@ package login
 //go:generate jade -pkg=views -writer -d ../views login.jade
 
 import (
-	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"server/db"
-	"server/homepage"
 	"server/views"
 )
 
@@ -21,10 +19,11 @@ func login(writer http.ResponseWriter, request *http.Request, _ httprouter.Param
 }
 
 func userLogin(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-
-	fmt.Printf("Funktion wird aufgerufen\n")
-
-	request.ParseForm()
+	err := request.ParseForm()
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	user := request.Form.Get("username")
 	pw := request.Form.Get("password")
 
@@ -37,8 +36,7 @@ func userLogin(writer http.ResponseWriter, request *http.Request, params httprou
 
 	if !success {
 		writer.WriteHeader(http.StatusUnauthorized)
-
 	} else {
-		homepage.Home(writer, request, params)
+		writer.WriteHeader(http.StatusOK)
 	}
 }
