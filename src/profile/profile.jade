@@ -1,10 +1,11 @@
 extends ../web_lib/layout
+include  ../web_lib/plugins
 
 block goInit
-    :go:func Profile(username string)
+    :go:func Profile(username string, plugins []PluginTemplateData)
 
 block variables
-    - var title= "Login"
+    - var title= "Profile"
 
 append styles
     link(rel='stylesheet', href='dist/profile/profile.css')
@@ -13,41 +14,55 @@ append scripts
     script(src="/dist/profile/profile.js")
 
 block content
-    .Position
-        // Diverent SubSides.......
-        div
-            button.logbtn(onclick='Plugins()') Your Plugins
-        div
-            button.logbtn(onclick='AccountSettins()') Account Settings
-    #Plugin.Plugins
-        | Plugins
-    #Account.Account
-        .box.boxHeading.boxSpalte
-            div Account Information
-            .distance User Information
-            .distance Change Passwort
-        .box.boxSpalte
-            .entry User Name
-            .entry Passwort
-            .entry Account erstellt
-            .entry.entryNewSection Vorname
-            .entry Nachname
-            .entry.entryNewSection2 Altes Passwort
-            .entry neues Passwort
-            .entry neues Passwort Wiederholen
-        .box.boxRight.boxSpalte
-            .entry Julian Soboot
-            .entry **********
-            .entry 08.08.2020
-            .entry.entryNewSection Julian
-            .entry Soboot
-            form(action='/...')
-                .txtb.txtbNewSection
-                    input.plHolder(type='password' placeholder='********')
-                .txtb
-                    input.plHolder(type='password' placeholder='********')
-                .txtb
-                    input.plHolder(type='password' placeholder='********')
-                div
-                    button.logbtn.btnFormular(type='submit') Passwort &auml;ndern
+    .parent
+        .Position
+            button.btn#btnPlugins(onclick='Plugins()') Your Plugins
+            button.btn#btnAccount(onclick='AccountSettins()') Account Settings
+        #Plugin.content-profile
+            for plugin in plugins
+                +Plugin(plugin, true)
+            else
+                .noPlugins
+                    | You haven't created any plugins yet. Check out the
+                    a(href="/devGuide")  Dev Guide
 
+        #Account.content-profile
+            table
+                tr
+                    td Account Information
+                    td Username
+                    td #{username}
+                tr
+                    td
+                    td Account created
+                    td 08.08.2020
+                tr.newSection
+                tr
+                    td User Information
+                    td Name
+                    td #{username}
+                tr
+                    td
+                    td Family Name
+                    td #{username}
+                tr.newSection
+                tr
+                    td Change password
+                    td Old password
+                    td
+                        input.plHolder(type='password' placeholder='********')
+                tr
+                    td
+                    td New password
+                    td
+                        input.plHolder(type='password' placeholder='********')
+                tr
+                    td
+                    td Repeat new password
+                    td
+                        input.plHolder(type='password' placeholder='********')
+                tr
+                    td
+                    td
+                    td
+                        input.btn.plHolder(type='button' value="Change password")

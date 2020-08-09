@@ -5,15 +5,19 @@ package profile
 import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
+	"server/plugins"
 	"server/views"
 )
 
 func Init(router *httprouter.Router) {
-	router.GET("/profile", register)
+	router.GET("/profile", profile)
 }
 
-func register(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-
+func profile(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	pluginsData, err := plugins.ListTemplateData("")
+	if err != nil {
+		pluginsData = []views.PluginTemplateData{}
+	}
 	name := "Hans Wurst"
-	views.Profile(name, writer)
+	views.Profile(name, pluginsData, writer)
 }

@@ -1,105 +1,76 @@
 @import "src/web_lib/stylesheets/color_themes"
 
-.Position
-  position: relative
-  margin-top: 2%
-  padding-top: 100px
-  width: 240px
-  height: 420px
-  background: linear-gradient(240deg,  #676767, grey, #676767)
-  border-radius: 12px
+.parent
+  display: flex
+  flex-direction: row
+  align-items: stretch
+  margin-top: 20px
 
-.logbtn
-  display: block
-  width: 95%
-  height: 50px
-  background: linear-gradient(240deg,  #8e44ad, #6d00cc, #8e44ad)
-  color: #fff
-  border-color: white
-  border-width: 1px
-  border-radius: 5px
-  margin: 5px
+  .Position
+    flex: 1
+    position: relative
+    min-height: 300px
+    background: linear-gradient(240deg,  #676767, grey, #676767)
+    border-radius: 12px
+    display: flex
+    flex-direction: column
+    padding: 20px
 
-// zwei inhalte der beiden Buttons
+    button
+      padding: 10px
+      margin-top: 10px
 
-.Plugins
-  width: 80%
-  height: 520px
-  background-color: red
-  position: relative
-  left: 20%
-  top: -520px
-  display: none
-
-.Account
-  width: 80%
-  height: 500px
-  background-color: #4d4d4d
-  position: relative
-  left: 20%
-  top: -520px
-  border-radius: 12px
+      &.selected
+        box-shadow: -3px -3px 5px 0px rgba(0, 0, 0, 0.6)
 
 
-// Inhalt User information
+  .content-profile
+    flex: 5
+    min-height: 500px
+    margin-left: 20px
+    background: var(--color-elevation-20)
+    padding: 30px
 
-.box
-  float: left
-  padding: 1%
-  background: #4d4d4d
-  width: 31.3%
-  font-size: larger
+  #Plugin
+    display: none
+    align-items: flex-start
+    flex-wrap: wrap
 
-.boxRight
-  text-align: right
+    .noPlugins
+      font-size: 1.3em
+      color: var(--color-font-default)
 
-.boxHeading
-  font-weight: bold
-
-.distance
-  margin-top: 40px *3 + 5px
+  #Account
+    display: block
 
 
-.boxSpalte
-  height: 100%
+  // Inhalt User information
+  table
+    width: 100%
+    tr
+      height: 2em
+      td:nth-child(1) // Section name
+        font-size: 1.5em
+      td:nth-child(2)
+        font-weight: bold
+      td:nth-child(3)
+        font-weight: bold
 
-.entry
-  background-color: #959595
-  color: white
-  border-radius: 7px
-  padding: 7px
-  margin-top: 5px
+    .newSection
+      height: 50px
 
-.entryNewSection
-  margin-top: 30px
-
-.entryNewSection2
-  margin-top: 60px
-
-.txtb
-  border-bottom: 2px solid #adadad
-  position: relative
-  margin: 10px 0
-
-.txtb input
-  font-size: 15px
-  color: white
-  border: none
-  width: 100%
-  outline: none
-  background: none
-  padding: 0 8px
-  height: 30px
-
-.plHolder::placeholder
-  color: white
-
-.txtbNewSection
-  margin-top: 60px
-  font-size: larger
-
-.btnFormular
-  width: 80%
-  position: relative
-  margin: auto
-
+  input[type="password"]
+    font-size: 15px
+    color: white
+    border: none
+    width: 100%
+    outline: none
+    background: none
+    padding: 0 8px
+    height: 30px
+    border-bottom: 2px solid #adadad
+    position: relative
+    margin: 10px 0
+  input[type="button"]
+    width: 100%
+    padding: 10px
