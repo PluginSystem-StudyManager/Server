@@ -1,9 +1,31 @@
 @import "src/web_lib/stylesheets/color_themes"
 
+// Box structure
 
-h2
-  text-align: center
+.boxes-container
+  display: flex
+  flex-direction: column
+  align-items: stretch
+  width: 100%
 
+  .row
+    display: flex
+    flex-direction: row
+    align-items: stretch
+    flex-wrap: wrap
+
+    .box
+      flex: 1
+      margin: 10px
+      display: flex
+      flex-direction: column
+      background: #eee
+      padding: 20px
+
+      .box-header
+        text-align: center
+      .box-content
+        flex: 1 // Push footer to bottom /fill space
 
 // slideshow
 
@@ -13,71 +35,57 @@ h2
   position: relative
   margin: auto
 
-/* Hide the images by default */
-.mySlides
-  display: none
-  margin-bottom: 20px
+  /* Hide the images by default */
+  .mySlides
+    display: none
+    margin-bottom: 20px
 
-/* Next & previous buttons */
-.prev, .next
-  cursor: pointer
-  position: absolute
-  top: 50%
-  width: auto
-  margin-top: -22px
-  padding: 16px
-  color: white
-  font-weight: bold
-  font-size: 18px
-  transition: 0.6s ease
-  border-radius: 0 3px 3px 0
-  user-select: none
-  background-color: #3498db
+    /* Caption text */
+    .text
+      color: white
+      background-color: #3498db
+      font-size: 15px
+      padding: 6px 2px
+      position: absolute
+      bottom: 8px
+      width: 33%
+      text-align: center
+      left: 33%
+      border-radius: 7px
 
-/* Position the "next button" to the right */
-.next
-  right: 0
-  border-radius: 3px 0 0 3px
+  /* Fading animation */
+  .fade
+    -webkit-animation-name: fade
+    -webkit-animation-duration: 1.5s
+    animation-name: fade
+    animation-duration: 1.5s
 
-/* On hover, add a black background color with a little bit see-through */
-.prev:hover, .next:hover
-  background-color: #8e44ad
+  /* Next & previous buttons */
+  .prev, .next
+    cursor: pointer
+    position: absolute
+    top: 50%
+    width: auto
+    margin-top: -22px
+    padding: 16px
+    color: white
+    font-weight: bold
+    font-size: 18px
+    transition: 0.6s ease
+    border-radius: 0 3px 3px 0
+    user-select: none
+    background-color: #3498db
 
-/* Caption text */
-.text
-  color: white
-  background-color: #3498db
-  font-size: 15px
-  padding: 6px 2px
-  position: absolute
-  bottom: 8px
-  width: 33%
-  text-align: center
-  left: 33%
-  border-radius: 7px
+    &:hover
+      background-color: #8e44ad
+
+  /* Position the "next button" to the right */
+  .next
+    right: 0
+    border-radius: 3px 0 0 3px
 
 
 
-/* The dots/bullets/indicators */
-.dot
-  cursor: pointer
-  height: 15px
-  width: 15px
-  margin: 0 2px
-  background-color: #bbb
-  border-radius: 50%
-  display: inline-block
-  transition: background-color 0.6s ease
-
-.active, .dot:hover
-  background-color: #717171
-
-/* Fading animation */
-.fade
-  -webkit-animation-name: fade
-  -webkit-animation-duration: 1.5s
-  animation-name: fade
-  animation-duration: 1.5s
 
 @-webkit-keyframes fade
   from
@@ -146,99 +154,32 @@ $button-text-color: #fff
   align-items: center
   justify-content: center
 
-//** button
-.btn
-  transition: all 200ms ease-in
-
-  &--primary
-    background: $button-bg-color
-    color: $button-text-color
-    box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1)
-    border-radius: 2px
-    padding: 12px 36px
-
-    &:hover
-      background: darken($button-bg-color, 15%)
+  //** form
+  .form
+    &__field
+      width: 360px
+      background: #fff
+      color: $input-text-color
+      font: inherit
+      box-shadow: 0 6px 10px 0 rgba(0, 0, 0 , .1)
+      border: 0
+      outline: 0
+      padding: 22px 18px
 
 
-  &--inside //** genau das gleich wie .btn--inside
-    margin-left: -96px
+  //** button
+  .btn
+    transition: all 200ms ease-in
 
+    &--primary
+      background: $button-bg-color
+      color: $button-text-color
+      box-shadow: 0 0 10px 2px rgba(0, 0, 0, .1)
+      border-radius: 2px
+      padding: 12px 36px
 
-//** form
-.form
-  &__field
-    width: 360px
-    background: #fff
-    color: $input-text-color
-    font: inherit
-    box-shadow: 0 6px 10px 0 rgba(0, 0, 0 , .1)
-    border: 0
-    outline: 0
-    padding: 22px 18px
+      &:hover
+        background: darken($button-bg-color, 15%)
 
-.boxTop
-  height: 580px
-
-.box-guide
-  height: 350px
-
-$boxMargin: 10px
-
-.box
-  float: left
-  padding: 20px
-  background: #eee
-  position: relative
-  box-sizing: border-box
-  margin-bottom: $boxMargin/2
-  margin-top: $boxMargin/2
-  display: flex
-  flex-direction: column
-
-
-.box-1
-  width: 100%
-
-.box-2
-  width: calc(50% - #{$boxMargin} / 2)
-
-.box-2-left
-  margin-right: $boxMargin / 2
-
-.box-2-right
-  margin-left: $boxMargin / 2
-
-.box-3-left
-  width: calc(33% - #{$boxMargin} / 2)
-  margin-right: $boxMargin / 2
-
-.box-3-mid
-  width: calc(33% - #{$boxMargin} / 2)
-  margin-left: $boxMargin / 2
-  margin-right: $boxMargin / 2
-
-.box-3-right
-  width: calc(33% - #{$boxMargin} / 2)
-  margin-left: $boxMargin / 2
-
-.box-content
-  flex: 1
-
-
-.boxContainer
-  display: flex
-  flex-direction: column
-  align-items: stretch
-  width: 100%
-
-  .row
-    display: flex
-    flex-direction: row
-    align-items: stretch
-    flex-wrap: wrap
-
-    .box-new
-      border: 2px solid red
-      flex: 1
-      margin: 10px
+    &--inside //** genau das gleich wie .btn--inside
+      margin-left: -96px
