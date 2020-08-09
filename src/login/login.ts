@@ -1,5 +1,6 @@
 function checkCredentials(form: HTMLFormElement) {
-    let data = new FormData(form)
+    // @ts-ignore
+    let data = new URLSearchParams(new FormData(form).entries())
 
     fetch("/userLogin", {
         body: data,
