@@ -10,6 +10,7 @@ import (
 var db *sql.DB
 
 func Init() {
+	log.Println("Initialized db on Windows")
 	dbPath := "../dist/foo.db"
 	_ = os.Remove(dbPath)
 
