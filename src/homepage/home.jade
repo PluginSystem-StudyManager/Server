@@ -1,7 +1,8 @@
 extends ../web_lib/layout
+include  ../web_lib/plugins
 
 block goInit
-    :go:func Homepage()
+    :go:func Homepage(plugins []PluginTemplateData)
 
 block variables
     - var title= "Homepage"
@@ -47,19 +48,8 @@ block content
     // Plugin Abschnitt
     .boxPlugins.box
         h2 Plugins
-        br
-        .plugins
-            .pluginImage
-                img(src='/dist/res/desktop-96.png' height='100' width='100')
-            .pluginImage
-                img(src='/dist/res/desktop-96.png' height='100' width='100')
-            .pluginImage
-                img(src='/dist/res/desktop-96.png' height='100' width='100')
-            .pluginImage
-                img(src='/dist/res/desktop-96.png' height='100' width='100')
-        br
-        br
-        br
+        for plugin in plugins
+            +Plugin(plugin)
         a(href="/marketplace")
             button.downbtn zur Plugin &Uuml;bersicht
     .boxPlugins.boxPluginMiddle

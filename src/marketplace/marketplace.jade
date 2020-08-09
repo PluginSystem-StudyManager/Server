@@ -1,4 +1,5 @@
 extends ../web_lib/layout
+include ../web_lib/plugins
 
 block goInit
     :go:func Marketplace(plugins []PluginTemplateData, searchValue string)
@@ -18,11 +19,4 @@ block content
             input.btn(type="submit" value="Search")
 
     for plugin in plugins
-        a.plugin(href='/plugins/info/' + plugin.Name + "/html")
-            .title
-                .icon
-                    img(src='/plugins/info/' + plugin.Name + '/img/icon.png')
-                .name #{plugin.Name}
-            .description #{plugin.ShortDescription}
-            .preview
-                img(src='/plugins/info/' + plugin.Name + '/img/preview/preview_1.jpg')
+        +Plugin(plugin)
