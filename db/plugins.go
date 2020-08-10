@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"lang.yottadb.com/go/yottadb"
-	"log"
+	"fmt"
 	"net/http"
 )
 
@@ -66,6 +66,7 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 	var dummyRes = ""
 	for true {
 		currSub, err = yottadb.SubNextE(yottadb.NOTTP, nil, "plugins", []string{currSub})
+		fmt.Printf("currSub: %v\n", currSub)
 		if err != nil {
 			errorCode := yottadb.ErrorCode(err)
 			if errorCode == yottadb.YDB_ERR_NODEEND {
@@ -74,12 +75,11 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 				panic(err) // TODO
 			}
 		}
-		dummyRes += ";" + currSub
-		log.Println(currSub)
+		dummyRes = dummyRes + ";" + currSub
 	}
 	plugins := []PluginData{{
 		Name:             dummyRes,
-		ShortDescription: "",
+		ShortDescription: "Default description",
 		Tags:             nil,
 		UserIds:          nil,
 	}}

@@ -102,6 +102,7 @@ func testDb() {
 	} else {
 		fmt.Printf("Plugins: %v\n", pluginsList)
 		fmt.Printf("Plugin 1 name: %v\n", pluginsList[0].Name)
+		fmt.Printf("Plugin 1 description: %v\n", pluginsList[0].ShortDescription)
 	}
 }
 

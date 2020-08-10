@@ -5,8 +5,8 @@ RUN apt install -y git
 
 WORKDIR /db
 ENV GOBIN /db/bin
-ENV GOPATH /db
-ENV PATH=$PATH:$GOPATH/bin
+#ENV GOPATH /db
+ENV PATH=$PATH:/db/bin
 
 COPY . .
 
