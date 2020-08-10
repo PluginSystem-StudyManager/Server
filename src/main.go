@@ -22,6 +22,9 @@ import (
 	"server/register"
 	"server/server"
 	"server/utils"
+	"fmt"
+	"io/ioutil"
+	"bytes"
 )
 
 func main() {
@@ -42,12 +45,40 @@ func main() {
 	db.Init()
 	defer db.Close()
 
+	// TODO: remove: test only
+	testDb()
+
 	s := server.New(":8080", router)
 	err := s.ListenAndServe()
 	if err != nil {
 		log.Fatalf("Server error: %v", err)
 	}
 
+}
+
+func testDb() {
+	url := "http://db:8090"
+	resp, err := http.Get(url + "/hello")
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	content := string(body)
+	fmt.Printf("%v - %v\n", content, err)
+
+	resp, err = http.Post(url + "/add", "text/plaintext", bytes.NewBuffer([]byte("NewData")))
+	defer resp.Body.Close()
+	body, err = ioutil.ReadAll(resp.Body)
+	content = string(body)
+	fmt.Printf("%v - %v\n", content, err)
+
+	resp, err = http.Get(url + "/get")
+	defer resp.Body.Close()
+	body, err = ioutil.ReadAll(resp.Body)
+	content = string(body)
+	fmt.Printf("%v - %v\n", content, err)
 }
 
 func serveStatic(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
