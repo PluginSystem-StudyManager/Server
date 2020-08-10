@@ -15,7 +15,7 @@ func Init(router *httprouter.Router) {
 }
 
 func profile(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	username := "Walter" // TODO: get from Cookie
+	username := "John" // TODO: get from Cookie
 	pluginsData := plugins.DbDataToTemplateData(db.ListPluginsByUser(username))
 	name := "Hans Wurst"
 	views.Profile(name, pluginsData, writer)
