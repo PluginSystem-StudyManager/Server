@@ -54,8 +54,8 @@ func Init() {
 		return
 	}
 	// TODO: Debug only
-	_, _ = AddUser("John", "12345")
-	_, _ = UpdateToken("John", "12345", "2022")
+	_ = AddUser("John", "12345")
+	_ = UpdateToken("John", "12345", "2022")
 }
 
 func Close() {

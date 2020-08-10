@@ -1,13 +1,13 @@
 package db
 
 import (
-	"database/sql"
 	"errors"
 	"log"
 )
 
-func AddUser(username string, password string) (sql.Result, error) {
-	return insert("INSERT INTO users(username, password) values (?, ?)", username, password)
+func AddUser(username string, password string) error {
+	_, err := insert("INSERT INTO users(username, password) values (?, ?)", username, password)
+	return err
 }
 
 func CheckCredentials(username string, password string) (bool, error) {
@@ -36,8 +36,9 @@ func CheckCredentials(username string, password string) (bool, error) {
 	return false, nil
 }
 
-func UpdateToken(username string, token string, ttl string) (sql.Result, error) {
-	return insert(`UPDATE users SET token=?, token_ttl=? WHERE username=?`, token, ttl, username)
+func UpdateToken(username string, token string, ttl string) error {
+	_, err := insert(`UPDATE users SET token=?, token_ttl=? WHERE username=?`, token, ttl, username)
+	return err
 }
 
 func UserIdByToken(token string) (int, error) {
