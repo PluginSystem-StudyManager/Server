@@ -1,11 +1,11 @@
 package main
 
 import (
-	"net/http"
 	"fmt"
-	"log"
-	"lang.yottadb.com/go/yottadb"
 	"io/ioutil"
+	"lang.yottadb.com/go/yottadb"
+	"log"
+	"net/http"
 )
 
 func add(w http.ResponseWriter, req *http.Request) {
@@ -28,8 +28,6 @@ func get(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, r)
 }
 
-
-
 func hello(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "Hello from DB\n")
 }
@@ -38,7 +36,8 @@ func main() {
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/add", add)
 	http.HandleFunc("/get", get)
+	http.HandleFunc("/plugins/add", addPlugin)
+	http.HandleFunc("/plugins/list", listPlugins)
 	log.Println("DB started at port 8090")
 	http.ListenAndServe(":8090", nil)
 }
-

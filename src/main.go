@@ -9,7 +9,10 @@ package main
 //go:generate go generate server/downloadApplication
 
 import (
+	"bytes"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"server/db"
@@ -22,9 +25,6 @@ import (
 	"server/register"
 	"server/server"
 	"server/utils"
-	"fmt"
-	"io/ioutil"
-	"bytes"
 )
 
 func main() {
@@ -68,7 +68,7 @@ func testDb() {
 	content := string(body)
 	fmt.Printf("%v - %v\n", content, err)
 
-	resp, err = http.Post(url + "/add", "text/plaintext", bytes.NewBuffer([]byte("NewData")))
+	resp, err = http.Post(url+"/add", "text/plaintext", bytes.NewBuffer([]byte("NewData")))
 	defer resp.Body.Close()
 	body, err = ioutil.ReadAll(resp.Body)
 	content = string(body)
@@ -79,6 +79,30 @@ func testDb() {
 	body, err = ioutil.ReadAll(resp.Body)
 	content = string(body)
 	fmt.Printf("%v - %v\n", content, err)
+
+	err = db.AddPlugin(db.PluginData{
+		Name:             "Dummy_Plugin_1",
+		ShortDescription: "Description",
+		Tags:             []string{"Tag1", "tag2"},
+		UserIds:          []int{1, 2},
+	})
+	fmt.Printf("add plugin: %v\n", err)
+
+	err = db.AddPlugin(db.PluginData{
+		Name:             "Dummy_Plugin_2",
+		ShortDescription: "Description2",
+		Tags:             []string{"Tag3", "tag4"},
+		UserIds:          []int{1, 3},
+	})
+	fmt.Printf("add plugin: %v\n", err)
+
+	pluginsList, err := db.ListPlugins()
+	if err != nil {
+		fmt.Printf("Error listing plugins: %v\n", err)
+	} else {
+		fmt.Printf("Plugins: %v\n", pluginsList)
+		fmt.Printf("Plugin 1 name: %v\n", pluginsList[0].Name)
+	}
 }
 
 func serveStatic(w http.ResponseWriter, r *http.Request, p httprouter.Params) {

@@ -3,54 +3,70 @@
 package db
 
 import (
-	"lang.yottadb.com/go/yottadb"
-	"log"
+	"bytes"
+	"encoding/json"
+	"errors"
+	"io/ioutil"
+	"net/http"
 )
 
-const (
-	cPlugins          = "plugins"
-	cName             = "name"
-	cShortDescription = "shortDescription"
-	cTags             = "tags"
-	cAuthors          = "authors"
-)
+type ListResult struct {
+	Success bool         `json:"success"`
+	Message string       `json:"message"`
+	Data    []PluginData `json:"data"`
+}
+
+type AddResult struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+type ListRequest struct {
+	Search string `json:"search"`
+}
 
 func AddPlugin(data PluginData) error {
-	yottadb.SetValE(yottadb.NOTTP, nil, data.Name, cPlugins, []string{data.Name, cName})
-	yottadb.SetValE(yottadb.NOTTP, nil, data.ShortDescription, cPlugins, []string{data.Name, cShortDescription})
-	for i, tag := range data.Tags {
-		yottadb.SetValE(yottadb.NOTTP, nil, tag, cPlugins, []string{data.Name, cTags, string(rune(i))})
+	body, _ := json.Marshal(data)
+	res, err := http.Post("http://db:8090/plugins/add", "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return err
 	}
-	for i, author := range data.UserIds {
-		yottadb.SetValE(yottadb.NOTTP, nil, string(rune(author)), cPlugins, []string{data.Name, cAuthors, string(rune(i))})
+	defer res.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(res.Body)
+	var response AddResult
+	_ = json.Unmarshal(bodyBytes, &response)
+	if response.Success {
+		return nil
+	} else {
+		return errors.New("Error adding plugin: " + response.Message)
 	}
-	return nil
 }
 
 func PluginIdByName(name string) (int, error) { // TODO: Change name to exists()
-	return 0, nil
+	return 0, errors.New("not exists")
 }
 
 func ListPlugins() ([]PluginData, error) {
-	var currSub = ""
-	var err error
-	for true {
-		currSub, err = yottadb.SubNextE(yottadb.NOTTP, nil, "plugins", []string{currSub})
-		if err != nil {
-			errorCode := yottadb.ErrorCode(err)
-			if errorCode == yottadb.YDB_ERR_NODEEND {
-				break
-			} else {
-				panic(err) // TODO
-			}
-		}
-		log.Println(currSub)
-	}
-	return nil, nil
+	return ListPluginsSearch("")
 }
 
 func ListPluginsSearch(value string) ([]PluginData, error) {
-	return nil, nil
+	body, _ := json.Marshal(ListRequest{
+		Search: value,
+	})
+	res, err := http.Post("http://db:8090/plugins/list", "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	bodyBytes, _ := ioutil.ReadAll(res.Body)
+	var response ListResult
+	_ = json.Unmarshal(bodyBytes, &response)
+	if response.Success {
+		return response.Data, nil
+	} else {
+		return nil, errors.New("Error listing plugin: " + response.Message)
+	}
 }
 
 func ListPluginsByUser(username string) ([]PluginData, error) {
