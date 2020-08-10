@@ -65,7 +65,7 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 	var pluginName = ""
 	var plugins []PluginData
 	for true {
-		pluginName, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{})
+		pluginName, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName})
 		fmt.Printf("pluginName: %v\n", pluginName)
 		if err != nil {
 			errorCode := yottadb.ErrorCode(err)

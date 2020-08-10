@@ -46,7 +46,7 @@ func main() {
 	defer db.Close()
 
 	// TODO: remove: test only
-	testDb()
+	//testDb()
 
 	s := server.New(":8080", router)
 	err := s.ListenAndServe()
