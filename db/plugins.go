@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"lang.yottadb.com/go/yottadb"
-	"fmt"
 	"net/http"
 )
 
@@ -62,11 +62,11 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 	var data ListRequest
 	_ = json.Unmarshal(body, &data)
 
-	var currSub = ""
-	var dummyRes = ""
+	var pluginName = ""
+	var plugins []PluginData
 	for true {
-		currSub, err = yottadb.SubNextE(yottadb.NOTTP, nil, "plugins", []string{currSub})
-		fmt.Printf("currSub: %v\n", currSub)
+		pluginName, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{})
+		fmt.Printf("pluginName: %v\n", pluginName)
 		if err != nil {
 			errorCode := yottadb.ErrorCode(err)
 			if errorCode == yottadb.YDB_ERR_NODEEND {
@@ -75,14 +75,18 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 				panic(err) // TODO
 			}
 		}
-		dummyRes = dummyRes + ";" + currSub
+		if len(pluginName) > 0 {
+			description, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cShortDescription})
+			name, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cName})
+			fmt.Printf("name: %v, description: %v\n", name, description)
+			plugins = append(plugins, PluginData{
+				Name:             name,
+				ShortDescription: description,
+				Tags:             nil,
+				UserIds:          nil,
+			})
+		}
 	}
-	plugins := []PluginData{{
-		Name:             dummyRes,
-		ShortDescription: "Default description",
-		Tags:             nil,
-		UserIds:          nil,
-	}}
 	response, err := json.Marshal(ListResult{
 		Success: true,
 		Message: "",
