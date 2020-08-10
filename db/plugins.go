@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"lang.yottadb.com/go/yottadb"
 	"net/http"
+	"strings"
 )
 
 type PluginData struct {
@@ -61,12 +61,12 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 	body, err := ioutil.ReadAll(req.Body)
 	var data ListRequest
 	_ = json.Unmarshal(body, &data)
+	search := data.Search
 
 	var pluginName = ""
 	var plugins []PluginData
 	for true {
 		pluginName, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName})
-		fmt.Printf("pluginName: %v\n", pluginName)
 		if err != nil {
 			errorCode := yottadb.ErrorCode(err)
 			if errorCode == yottadb.YDB_ERR_NODEEND {
@@ -78,13 +78,15 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 		if len(pluginName) > 0 {
 			description, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cShortDescription})
 			name, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cName})
-			fmt.Printf("name: %v, description: %v\n", name, description)
-			plugins = append(plugins, PluginData{
+			plugin := PluginData{
 				Name:             name,
 				ShortDescription: description,
 				Tags:             nil,
 				UserIds:          nil,
-			})
+			}
+			if hasSearch(plugin, search) {
+				plugins = append(plugins, plugin)
+			}
 		}
 	}
 	response, err := json.Marshal(ListResult{
@@ -93,4 +95,11 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 		Data:    plugins,
 	})
 	w.Write(response)
+}
+
+func hasSearch(plugin PluginData, search string) bool {
+	contains := func(s string, substr string) bool {
+		return strings.Contains(strings.ToUpper(s), strings.ToUpper(substr))
+	}
+	return contains(plugin.Name, search) || contains(plugin.ShortDescription, search)
 }
