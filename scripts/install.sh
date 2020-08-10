@@ -16,6 +16,7 @@ sudo add-apt-repository \
    stable"
 sudo apt-get update
 sudo apt-get -y install docker-ce docker-ce-cli containerd.io
+sudo apt install docker-compose
 
 # clone repository
 cd ~
@@ -24,11 +25,7 @@ cd StudyTool
 git clone https://github.com/PluginSystem-StudyManager/Server
 cd Server
 
-# create Docker container
-sudo docker build -t server:1.0 .
-
-# run
-sudo docker run --name server -d -p 8080:8080 -it server:1.0
+sudo docker-compose up
 
 # setup nginx
 # TODO uncomment and fix if needed

@@ -1,6 +1,6 @@
+//+build yottadb
+
 package db
-
-
 
 func AddUser(username string, password string) error {
 	return nil

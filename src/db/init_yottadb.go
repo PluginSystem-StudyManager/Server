@@ -1,3 +1,5 @@
+//+build yottadb
+
 package db
 
 import "log"
