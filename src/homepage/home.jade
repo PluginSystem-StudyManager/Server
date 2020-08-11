@@ -1,7 +1,7 @@
 extends ../web_lib/layout
 include  ../web_lib/plugins
 
-block goInit
+block xmlns:height="http://www.w3.org/1999/xhtml" goInit
     :go:func Homepage(plugins []PluginTemplateData)
 
 block variables
@@ -76,7 +76,7 @@ block content
             // Developer Guide Abschnitt
             .box
                 .box-content
-                    img.CENTERPhoto(src='/dist/res/Quellcode_Image.jpg')
+                    img.CENTERPhoto(src='/dist/res/Quellcode_Image.jpg' style='width:100%; height:300px')
             .box
                 .box-header
                     h2 Dev Guide

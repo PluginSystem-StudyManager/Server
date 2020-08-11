@@ -35,13 +35,14 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, params htt
 	result, err := db.UsernameAvailable(userName)
 
 	if result {
-
 		err := db.AddUser(userName, password, firstName, lastName, eMail)
-
 		if err != nil {
 
 			//do Fehlerbeseitigung
 		}
+	} else {
+
+		//
 	}
 
 }
