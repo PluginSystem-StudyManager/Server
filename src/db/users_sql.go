@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-func AddUser(username string, password string) error {
-	_, err := insert("INSERT INTO users(username, password) values (?, ?)", username, password)
+func AddUser(username string, password string, firstName string, lastName string, email string) error {
+	_, err := insert("INSERT INTO users(username, password, firstName, lastName, e_mail) values (?, ?, ?, ?, ?)", username, password, firstName, lastName, email)
 	return err
 }
 
@@ -36,6 +36,32 @@ func CheckCredentials(username string, password string) (bool, error) {
 		}
 	}
 	return false, nil
+}
+
+func UsernameAvailable(username string) (bool, error) {
+
+	rows, err := db.Query(`SELECT username FROM users where  username=?`, username)
+
+	if err != nil {
+		log.Printf("Query Error: %v", err)
+		return false, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+
+		var uName string
+
+		err := rows.Scan(&uName)
+		if err != nil {
+			log.Printf("Query Error: %v", err)
+			return false, err
+		}
+		if username == uName {
+			return false, nil
+		}
+	}
+	return true, nil
 }
 
 func UpdateToken(username string, token string, ttl string) error {

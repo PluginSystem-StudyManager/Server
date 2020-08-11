@@ -1,3 +1,4 @@
+
 function checkCredentials(form: HTMLFormElement) {
     // @ts-ignore
     let data = new URLSearchParams(new FormData(form).entries())

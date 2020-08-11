@@ -30,7 +30,10 @@ func Init() {
 		username TEXT NOT NULL UNIQUE ,
 		password TEXT NOT NULL ,
 		token TEXT UNIQUE ,
-		token_ttl TEXT
+		token_ttl TEXT NULL ,
+		firstName Text NULL ,
+		lastName Text NULL ,
+		e_mail Text NULL
 	);
 	
 	CREATE TABLE user_plugins (
@@ -56,7 +59,7 @@ func Init() {
 		return
 	}
 	// TODO: Debug only
-	_ = AddUser("John", "12345")
+	_ = AddUser("John", "12345", "John", "Maier", "John.Maier@erb.de")
 	_ = UpdateToken("John", "12345", "2022")
 }
 
