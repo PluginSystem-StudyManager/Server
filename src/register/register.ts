@@ -1,5 +1,7 @@
 function checkRegistration(form: HTMLFormElement) {
 
+    let colorError = '#DC143C'
+    let errorField = document.getElementById("errorMessage")
     // @ts-ignore
     let data = new URLSearchParams(new FormData(form).entries())
 
@@ -10,7 +12,14 @@ function checkRegistration(form: HTMLFormElement) {
 
     if (result == false) {
         console.log('Das War wohl nix')
-        return
+
+        let pwField = document.getElementsByName('Password')
+        pwField[0].style.backgroundColor = colorError
+        let pwAgainField = document.getElementsByName('PasswordAgain')
+        pwAgainField[0].style.backgroundColor = colorError
+
+        errorField.innerText = "passwords do not match"
+
     } else {
 
         fetch("/checkUserName", {
