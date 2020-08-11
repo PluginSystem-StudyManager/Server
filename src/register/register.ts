@@ -1,10 +1,9 @@
 
 const colorError = '#DC143C'
+const errorField = document.getElementById("errorMessage")
 
 function checkRegistration(form: HTMLFormElement) {
 
-
-    let errorField = document.getElementById("errorMessage")
     // @ts-ignore
     let data = new URLSearchParams(new FormData(form).entries())
 
@@ -49,7 +48,7 @@ function allFieldsFilledOut(){
 
     var fieldNames = ['FirstName', 'LastName', 'UserName', 'EMail', 'Password', 'PasswordAgain'];
     fieldNames.forEach(fieldIsEmpty)
-
+    errorField.innerText = "please fill in all fields"
 }
 
 
