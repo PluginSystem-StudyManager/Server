@@ -13,7 +13,7 @@ append scripts
     script(src="/dist/register/register.js")
 
 block content
-    form.register-form(onsubmit="checkRegistration(this);return false;")
+    form.register-form(onsubmit='checkRegistration(this);return false;')
         img#RegistrationImage(src='/dist/res/mann.svg' width='80px' height='80px')
         h1 User Registration
         .txtbName
@@ -23,9 +23,9 @@ block content
             input(type='text' name='UserName' placeholder='Username')
         .txtb
             input(type='text' name='EMail' placeholder='Email')
-        .txtb
+        #pw1.txtb
             input(type='password' name='Password' placeholder='Password')
-        .txtb
+        #pw2.txtb
             input(type='password' name='PasswordAgain' placeholder='Repeat Password')
         div
             input(type='checkbox' name='CheckBoxAgreement')
