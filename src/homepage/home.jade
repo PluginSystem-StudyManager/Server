@@ -2,7 +2,7 @@ extends ../web_lib/layout
 include  ../web_lib/plugins
 
 block xmlns:height="http://www.w3.org/1999/xhtml" goInit
-    :go:func Homepage(plugins []PluginTemplateData)
+    :go:func Homepage(header HeaderData, plugins []PluginTemplateData)
 
 block variables
     - var title= "Homepage"
