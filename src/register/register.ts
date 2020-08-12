@@ -28,6 +28,17 @@ function checkRegistration(form: HTMLFormElement) {
         fetch("/checkUserName", {
             body: data,
             method: "POST"
+        }).then(function (response) {
+
+            if (response.ok) {
+                return response.json()
+            } else {
+
+            }
+        }).then(function (json) {
+
+            if (json.Fehlercode == 5)
+                showErrorMessage(json.Fehlermeldung)
         })
 
     }
@@ -55,7 +66,7 @@ function allFieldsFilledOut() {
 }
 
 
-function fieldIsEmpty(value:string, counter:number): number {
+function fieldIsEmpty(value: string, counter: number): number {
 
     let textField = <HTMLInputElement>document.getElementsByName(value)[0]
     if (textField.value.length == 0) {
@@ -67,10 +78,9 @@ function fieldIsEmpty(value:string, counter:number): number {
         textField.style.backgroundColor = ''
     }
 
-    if (counter == 0){
+    if (counter == 0) {
         showErrorMessage("")
     }
-    console.log("Leere Felder" + counter)
     return counter
 }
 

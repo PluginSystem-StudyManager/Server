@@ -3,6 +3,7 @@ package register
 //go:generate jade -pkg=views -writer -d ../views register.jade
 
 import (
+	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"server/db"
@@ -41,8 +42,20 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, params htt
 			//do Fehlerbeseitigung
 		}
 	} else {
+		type ErrorMessage struct {
+			Fehlercode    int
+			Fehlermeldung string
+		}
+		errorM := ErrorMessage{5, "Dieser User existiert bereits"}
+		js, err := json.Marshal(errorM)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-		//
+		writer.Header().Set("Content-Type", "application/json")
+		writer.Write(js)
+
 	}
 
 }
