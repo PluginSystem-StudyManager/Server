@@ -30,13 +30,16 @@ html(theme="dark")
                         h1 Study Manager
 
                     .dropdown
-                        button.dropbtn User Account
-                        .dropdown-content
-                            a(href='/login') Login
-                            a(href='/profile') Account
-                            a(href='#') Edit Plugins
-                            a(href='#') Settings
-
+                        if header.LoggedIn
+                            button.dropbtn header.UserName
+                            .dropdown-content
+                                a(href="/logout") Sign out
+                                a(href='/profile') Your Profile
+                        else
+                            //- TODO: Style
+                            a(href="/login") Login
+                            a(href="/register") Register 
+                            
 
         .content
             block content
