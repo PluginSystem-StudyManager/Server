@@ -1,4 +1,3 @@
-
 const colorError = '#DC143C'
 const errorField = document.getElementById("errorMessage")
 
@@ -22,7 +21,7 @@ function checkRegistration(form: HTMLFormElement) {
         let pwAgainField = document.getElementsByName('PasswordAgain')
         pwAgainField[0].style.backgroundColor = colorError
 
-        errorField.innerText = "passwords do not match"
+        showErrorMessage("passwords do not match")
 
     } else {
 
@@ -44,22 +43,40 @@ function comparePassword(pwd: string, pwd2: string): boolean {
 }
 
 
-function allFieldsFilledOut(){
+function allFieldsFilledOut() {
 
-    var fieldNames = ['FirstName', 'LastName', 'UserName', 'EMail', 'Password', 'PasswordAgain'];
-    fieldNames.forEach(fieldIsEmpty)
-    errorField.innerText = "please fill in all fields"
+    let fieldNames = ['FirstName', 'LastName', 'UserName', 'EMail', 'Password', 'PasswordAgain'];
+    let emptyFields = 0
+
+    for (let i = 0; i < fieldNames.length; i++) {
+
+        emptyFields = fieldIsEmpty(fieldNames[i], emptyFields)
+    }
 }
 
 
-function fieldIsEmpty (value) {
+function fieldIsEmpty(value:string, counter:number): number {
 
-    let textField = <HTMLInputElement> document.getElementsByName(value)[0]
-    if (textField.value.length == 0){
+    let textField = <HTMLInputElement>document.getElementsByName(value)[0]
+    if (textField.value.length == 0) {
 
         textField.style.backgroundColor = colorError
-    }
-    else {
+        showErrorMessage("Es wurden nicht alle Felder ausgefüllt")
+        counter++
+    } else {
         textField.style.backgroundColor = ''
     }
+
+    if (counter == 0){
+        showErrorMessage("")
+    }
+    console.log("Leere Felder" + counter)
+    return counter
 }
+
+
+function showErrorMessage(message: string) {
+
+    errorField.innerText = message
+}
+
