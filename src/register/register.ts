@@ -9,7 +9,7 @@ function checkRegistration(form: HTMLFormElement) {
     let password1 = data.get('Password')
     let passwort2 = data.get('PasswordAgain')
 
-    allFieldsFilledOut()
+    let noEmptyFields: boolean = allFieldsFilledOut()
 
     let result: boolean = comparePassword(password1, passwort2);
 
@@ -22,8 +22,8 @@ function checkRegistration(form: HTMLFormElement) {
         pwAgainField[0].style.backgroundColor = colorError
 
         showErrorMessage("passwords do not match")
-
-    } else {
+    }
+    if (noEmptyFields) {
 
         fetch("/checkUserName", {
             body: data,
@@ -37,8 +37,12 @@ function checkRegistration(form: HTMLFormElement) {
             }
         }).then(function (json) {
 
-            if (json.Fehlercode == 5)
+            if (json.Fehlercode == 5) {
                 showErrorMessage(json.Fehlermeldung)
+            } else if (json.Fehlercode == 0) {  // kein Fehler
+
+                window.location.assign("/")
+            }
         })
 
     }
@@ -54,7 +58,7 @@ function comparePassword(pwd: string, pwd2: string): boolean {
 }
 
 
-function allFieldsFilledOut() {
+function allFieldsFilledOut(): boolean {
 
     let fieldNames = ['FirstName', 'LastName', 'UserName', 'EMail', 'Password', 'PasswordAgain'];
     let emptyFields = 0
@@ -63,6 +67,10 @@ function allFieldsFilledOut() {
 
         emptyFields = fieldIsEmpty(fieldNames[i], emptyFields)
     }
+    if (emptyFields == 0)
+        return true
+    else
+        return false
 }
 
 
