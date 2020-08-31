@@ -10,21 +10,6 @@ import (
 	"net/http"
 )
 
-type ListResult struct {
-	Success bool         `json:"success"`
-	Message string       `json:"message"`
-	Data    []PluginData `json:"data"`
-}
-
-type AddResult struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
-type ListRequest struct {
-	Search string `json:"search"`
-}
-
 func AddPlugin(data PluginData) error {
 	body, _ := json.Marshal(data)
 	res, err := http.Post("http://db:8090/plugins/add", "application/json", bytes.NewBuffer(body))

@@ -1,8 +1,3 @@
 package db
 
-type PluginData struct {
-	Name             string   `json:"name"`
-	ShortDescription string   `json:"short_description"`
-	Tags             []string `json:"tags"`
-	UserIds          []int    `json:"user_ids"`
-}
+//go:generate schema-generate -o plugins.schema.go -p db ../../schemas/plugins/pluginData.schema.json ../../schemas/plugins/list.schema.json ../../schemas/plugins/add.schema.json

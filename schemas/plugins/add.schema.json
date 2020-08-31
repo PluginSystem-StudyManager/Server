@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "add",
+  "type": "object",
+  "properties": {
+    "request": {
+      "title": "addRequest",
+      "properties": {
+        "plugin": {
+          "$ref": "pluginData.schema.json"
+        }
+      },
+      "required": [
+        "plugin"
+      ]
+    },
+    "result": {
+      "title": "addResult",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "message",
+        "success"
+      ]
+    }
+  }
+}

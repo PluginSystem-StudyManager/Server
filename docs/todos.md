@@ -1,6 +1,10 @@
 - register
     - back to login
-
+- json schemas
+    - gruntfile
+    - plugins
+    - user
+    - all
 - Cookies
     - Save in db
     - send to user
