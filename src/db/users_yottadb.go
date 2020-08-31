@@ -1,4 +1,8 @@
-//+build yottadb
+//+build excluded
+
+/*
+For now only the plugins db is implemented with yottadb. Later on everything could be use yottadb.
+*/
 
 package db
 

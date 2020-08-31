@@ -8,6 +8,9 @@
       "properties": {
         "search": {
           "type": "string"
+        },
+        "userId": {
+          "type": "integer"
         }
       }
     },

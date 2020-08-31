@@ -1,4 +1,4 @@
-//+build !yottadb
+//+build !linux
 
 package db
 
