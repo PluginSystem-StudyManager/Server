@@ -31,11 +31,11 @@ func PluginIdByName(name string) (int, error) { // TODO: Change name to exists()
 	return 0, errors.New("not exists")
 }
 
-func ListPlugins() ([]PluginData, error) {
+func ListPlugins() ([]*PluginData, error) {
 	return ListPluginsSearch("")
 }
 
-func ListPluginsSearch(value string) ([]PluginData, error) {
+func ListPluginsSearch(value string) ([]*PluginData, error) {
 	body, _ := json.Marshal(ListRequest{
 		Search: value,
 	})
