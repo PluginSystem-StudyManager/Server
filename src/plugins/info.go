@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"server/utils"
 	"server/views"
+	"server/web_lib"
 	"strings"
 )
 
@@ -34,7 +35,8 @@ func info(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 			return
 		}
 		body := md.RenderToString(fileData)
-		views.TabInfo(body, pluginName, w)
+		header := web_lib.BuildHeaderData(r)
+		views.TabInfo(header, body, pluginName, w)
 	default:
 		if strings.HasPrefix(resourceName, "dist") {
 			http.ServeFile(w, r, "../"+resourceName)

@@ -87,3 +87,26 @@ func UserIdByToken(token string) (int, error) {
 	}
 	return -1, errors.New("no valid token found: " + token)
 }
+
+type User struct {
+	Username string
+}
+
+func UserByToken(token string) (User, error) {
+	rows, err := db.Query(`SELECT username FROM users WHERE token=? AND token_ttl>=datetime('now')`, token)
+	var user User
+	if err != nil {
+		log.Fatal(err)
+		return user, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err = rows.Scan(&user)
+		if err != nil {
+			log.Fatal(err)
+			return user, err
+		}
+		return user, nil
+	}
+	return user, errors.New("no valid token found: " + token)
+}

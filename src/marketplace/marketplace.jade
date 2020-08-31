@@ -2,7 +2,7 @@ extends ../web_lib/layout
 include ../web_lib/plugins
 
 block goInit
-    :go:func Marketplace(plugins []PluginTemplateData, searchValue string)
+    :go:func Marketplace(header HeaderData, plugins []PluginTemplateData, searchValue string)
 
 block variables
     - var title= "Marketplace"

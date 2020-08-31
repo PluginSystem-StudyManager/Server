@@ -2,7 +2,7 @@ extends ../web_lib/layout
 include  ../web_lib/plugins
 
 block goInit
-    :go:func Profile(username string, plugins []PluginTemplateData)
+    :go:func Profile(header HeaderData, username string, plugins []PluginTemplateData)
 
 block variables
     - var title= "Profile"

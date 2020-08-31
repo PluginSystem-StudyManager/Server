@@ -6,6 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"server/views"
+	"server/web_lib"
 )
 
 func Init(router *httprouter.Router) {
@@ -13,5 +14,6 @@ func Init(router *httprouter.Router) {
 }
 
 func login(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	views.DownloadApplication(writer)
+	header := web_lib.BuildHeaderData(request)
+	views.DownloadApplication(header, writer)
 }

@@ -1,7 +1,7 @@
 extends ../web_lib/layout
 
 block goInit
-    :go:func TabInfo(body string, pluginName string)
+    :go:func TabInfo(header HeaderData, body string, pluginName string)
 
 block variables
     - var title= 'Tab Info: ' + pluginName

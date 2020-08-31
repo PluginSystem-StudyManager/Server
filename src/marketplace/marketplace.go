@@ -8,6 +8,7 @@ import (
 	"server/db"
 	"server/plugins"
 	"server/views"
+	"server/web_lib"
 )
 
 func Init(router *httprouter.Router) {
@@ -18,5 +19,6 @@ func marketplace(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	_ = r.ParseForm()
 	search := r.Form.Get("search")
 	pluginsTemplateData := plugins.DbDataToTemplateData(db.ListPluginsSearch(search))
-	views.Marketplace(pluginsTemplateData, search, w)
+	header := web_lib.BuildHeaderData(r)
+	views.Marketplace(header, pluginsTemplateData, search, w)
 }

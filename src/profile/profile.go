@@ -8,6 +8,7 @@ import (
 	"server/db"
 	"server/plugins"
 	"server/views"
+	"server/web_lib"
 )
 
 func Init(router *httprouter.Router) {
@@ -18,5 +19,6 @@ func profile(writer http.ResponseWriter, request *http.Request, _ httprouter.Par
 	username := "John" // TODO: get from Cookie
 	pluginsData := plugins.DbDataToTemplateData(db.ListPluginsByUser(username))
 	name := "Hans Wurst"
-	views.Profile(name, pluginsData, writer)
+	header := web_lib.BuildHeaderData(request)
+	views.Profile(header, name, pluginsData, writer)
 }

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"server/db"
 	"server/views"
+	"server/web_lib"
 )
 
 func Init(router *httprouter.Router) {
@@ -15,7 +16,8 @@ func Init(router *httprouter.Router) {
 }
 
 func login(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	views.Login(writer)
+	header := web_lib.BuildHeaderData(request)
+	views.Login(header, writer)
 }
 
 func userLogin(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
