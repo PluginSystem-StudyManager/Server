@@ -1,4 +1,4 @@
-//+build !yottadb
+//+build
 
 package db
 
@@ -86,6 +86,25 @@ func UserIdByToken(token string) (int, error) {
 		return id, nil
 	}
 	return -1, errors.New("no valid token found: " + token)
+}
+
+func UserIdByUsername(username string) (int, error) {
+	rows, err := db.Query(`SELECT id FROM users WHERE username=?`, username)
+	if err != nil {
+		log.Fatal(err)
+		return -1, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var id int
+		err = rows.Scan(&id)
+		if err != nil {
+			log.Print(err)
+			return -1, err
+		}
+		return id, nil
+	}
+	return -1, errors.New("No user with username: " + username)
 }
 
 type User struct {

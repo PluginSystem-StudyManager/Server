@@ -1,4 +1,4 @@
-//+build !yottadb
+//+build !linux
 
 package db
 
@@ -50,21 +50,21 @@ func PluginIdByName(name string) (int, error) {
 	return -1, errors.New("no valid token found: " + name)
 }
 
-func ListPlugins() ([]PluginData, error) {
+func ListPlugins() ([]*PluginData, error) {
 	return listPluginsQuery(`
 	SELECT name, shortDescription
 	FROM plugins
 	`)
 }
 
-func ListPluginsSearch(value string) ([]PluginData, error) {
+func ListPluginsSearch(value string) ([]*PluginData, error) {
 	return listPluginsQuery(`
 	SELECT name, shortDescription
 	FROM plugins
 	WHERE UPPER(name) LIKE UPPER('%` + value + `%') OR UPPER(shortDescription) LIKE UPPER('%` + value + `%')`)
 }
 
-func ListPluginsByUser(username string) ([]PluginData, error) {
+func ListPluginsByUser(username string) ([]*PluginData, error) {
 	return listPluginsQuery(`
 		SELECT name, shortDescription
 		FROM plugins
@@ -74,14 +74,14 @@ func ListPluginsByUser(username string) ([]PluginData, error) {
 		`, username)
 }
 
-func listPluginsQuery(query string, args ...interface{}) ([]PluginData, error) {
+func listPluginsQuery(query string, args ...interface{}) ([]*PluginData, error) {
 	rows, err := db.Query(query, args...)
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
 	defer rows.Close()
-	var plugins []PluginData
+	var plugins []*PluginData
 	for rows.Next() {
 		var plugin PluginData
 		err = rows.Scan(&plugin.Name, &plugin.ShortDescription)
@@ -89,7 +89,7 @@ func listPluginsQuery(query string, args ...interface{}) ([]PluginData, error) {
 			log.Fatal(err)
 			return nil, err
 		}
-		plugins = append(plugins, plugin)
+		plugins = append(plugins, &plugin)
 	}
 	return plugins, nil
 }

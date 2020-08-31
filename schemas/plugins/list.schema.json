@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "list",
+  "type": "object",
+  "properties": {
+    "request": {
+      "title": "listRequest",
+      "properties": {
+        "search": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "integer"
+        }
+      }
+    },
+    "result": {
+      "title": "listResult",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "pluginData.schema.json"
+          }
+        }
+      },
+      "required": [
+        "data",
+        "message",
+        "success"
+      ]
+    }
+  }
+}

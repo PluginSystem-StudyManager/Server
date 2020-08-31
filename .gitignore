@@ -12,3 +12,6 @@ package-lock.json
 **/*.jade.go
 **/jade.go
 *.tmp.txt
+
+# generated schemas
+**.schema.go

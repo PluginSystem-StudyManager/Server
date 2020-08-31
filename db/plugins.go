@@ -1,5 +1,7 @@
 package main
 
+//go:generate schema-generate  -o plugins.schema.go -p main ../schemas/plugins/pluginData.schema.json ../schemas/plugins/list.schema.json ../schemas/plugins/add.schema.json
+
 import (
 	"encoding/json"
 	"io/ioutil"
@@ -8,13 +10,6 @@ import (
 	"strings"
 )
 
-type PluginData struct {
-	Name             string   `json:"name"`
-	ShortDescription string   `json:"short_description"`
-	Tags             []string `json:"tags"`
-	UserIds          []int    `json:"user_ids"`
-}
-
 const (
 	cPlugins          = "plugins"
 	cName             = "name"
@@ -22,21 +17,6 @@ const (
 	cTags             = "tags"
 	cAuthors          = "authors"
 )
-
-type ListResult struct {
-	Success bool         `json:"success"`
-	Message string       `json:"message"`
-	Data    []PluginData `json:"data"`
-}
-
-type AddResult struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
-type ListRequest struct {
-	Search string `json:"search"`
-}
 
 func addPlugin(w http.ResponseWriter, r *http.Request) {
 	var data PluginData
@@ -64,7 +44,7 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 	search := data.Search
 
 	var pluginName = ""
-	var plugins []PluginData
+	var plugins []*PluginData
 	for true {
 		pluginName, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName})
 		if err != nil {
@@ -85,7 +65,7 @@ func listPlugins(w http.ResponseWriter, req *http.Request) {
 				UserIds:          nil,
 			}
 			if hasSearch(plugin, search) {
-				plugins = append(plugins, plugin)
+				plugins = append(plugins, &plugin)
 			}
 		}
 	}

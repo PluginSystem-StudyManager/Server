@@ -24,7 +24,7 @@ func list(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	_, _ = w.Write(jsonData)
 }
 
-func DbDataToTemplateData(data []db.PluginData, err error) []views.PluginTemplateData {
+func DbDataToTemplateData(data []*db.PluginData, err error) []views.PluginTemplateData {
 	if err != nil {
 		return []views.PluginTemplateData{}
 	}

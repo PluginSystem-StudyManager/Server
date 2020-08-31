@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "pluginsSchemas",
+  "type": "object",
+  "properties": {
+    "request": {
+      "title": "addRequest",
+      "properties": {
+        "plugin": {
+          "$ref": "pluginData.schema.json"
+        }
+      }}
+  }
+}

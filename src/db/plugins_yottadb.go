@@ -1,4 +1,4 @@
-//+build yottadb
+//+build linux
 
 package db
 
@@ -9,21 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 )
-
-type ListResult struct {
-	Success bool         `json:"success"`
-	Message string       `json:"message"`
-	Data    []PluginData `json:"data"`
-}
-
-type AddResult struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
-type ListRequest struct {
-	Search string `json:"search"`
-}
 
 func AddPlugin(data PluginData) error {
 	body, _ := json.Marshal(data)
@@ -43,17 +28,40 @@ func AddPlugin(data PluginData) error {
 }
 
 func PluginIdByName(name string) (int, error) { // TODO: Change name to exists()
+	// TODO: implement
 	return 0, errors.New("not exists")
 }
 
-func ListPlugins() ([]PluginData, error) {
-	return ListPluginsSearch("")
+func ListPlugins() ([]*PluginData, error) {
+	req := ListRequest{
+		Search: "",
+		UserId: nil,
+	}
+	return listPlugins(req)
 }
 
-func ListPluginsSearch(value string) ([]PluginData, error) {
-	body, _ := json.Marshal(ListRequest{
+func ListPluginsSearch(value string) ([]*PluginData, error) {
+	req := ListRequest{
 		Search: value,
-	})
+		UserId: nil,
+	}
+	return listPlugins(req)
+}
+
+func ListPluginsByUser(username string) ([]*PluginData, error) {
+	id, err := UserIdByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+	req := ListRequest{
+		Search: "",
+		UserId: id,
+	}
+	return listPlugins(req)
+}
+
+func listPlugins(req ListRequest) ([]*PluginData, error) {
+	body, _ := json.Marshal(req)
 	res, err := http.Post("http://db:8090/plugins/list", "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
@@ -67,8 +75,4 @@ func ListPluginsSearch(value string) ([]PluginData, error) {
 	} else {
 		return nil, errors.New("Error listing plugin: " + response.Message)
 	}
-}
-
-func ListPluginsByUser(username string) ([]PluginData, error) {
-	return nil, nil
 }
