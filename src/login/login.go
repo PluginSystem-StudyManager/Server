@@ -16,12 +16,24 @@ import (
 
 func Init(router *httprouter.Router) {
 	router.GET("/login", login)
+	router.GET("/logout", logout)
 	router.POST("/userLogin", userLogin)
 }
 
 func login(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	header := web_lib.BuildHeaderData(request)
 	views.Login(header, writer)
+}
+
+func logout(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
+	cookie := &http.Cookie{
+		Name:    web_lib.CookieName,
+		Value:   "",
+		Path:    "/",
+		Expires: time.Unix(0, 0),
+	}
+	http.SetCookie(writer, cookie)
+	http.Redirect(writer, request, "/", http.StatusSeeOther)
 }
 
 func userLogin(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {

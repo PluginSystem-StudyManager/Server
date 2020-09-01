@@ -1,14 +1,6 @@
 - register
     - back to login
-- json schemas
-    - gruntfile
-    - plugins
-    - user
-    - all
-- Cookies
-    - Save in db
-    - send to user
-    - Check for every request -> Adjust menu
+
 - yottaDb on linux
     - users
     - list all plugins from a user
