@@ -1,5 +1,3 @@
-//+build
-
 package db
 
 import (
@@ -120,7 +118,7 @@ func UserByToken(token string) (User, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err = rows.Scan(&user)
+		err = rows.Scan(&user.Username)
 		if err != nil {
 			log.Fatal(err)
 			return user, err

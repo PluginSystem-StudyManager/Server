@@ -7,6 +7,7 @@ package main
 //go:generate go generate server/homepage
 //go:generate go generate server/plugins
 //go:generate go generate server/downloadApplication
+//go:generate go generate server/db
 
 import (
 	"github.com/julienschmidt/httprouter"

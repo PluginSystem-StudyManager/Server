@@ -31,14 +31,17 @@ html(theme="dark")
 
                     .dropdown
                         if header.LoggedIn
-                            button.dropbtn header.UserName
+                            button.dropbtn #{header.UserName}
                             .dropdown-content
                                 a(href="/logout") Sign out
                                 a(href='/profile') Your Profile
                         else
                             //- TODO: Style
-                            a(href="/login") Login
-                            a(href="/register") Register 
+                            ul
+                                li
+                                    a(href="/login") Login
+                                li
+                                    a(href="/register") Register
                             
 
         .content

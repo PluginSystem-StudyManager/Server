@@ -2,18 +2,19 @@ package web_lib
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"net/http"
 	"server/db"
 	"server/views"
 )
+
+const CookieName = "UserToken"
 
 type UserData struct {
 	Token string
 }
 
 func BuildHeaderData(r *http.Request) views.HeaderData {
-	cookie, err := r.Cookie("userdata") // TODO: constant cookie name
+	cookie, err := r.Cookie(CookieName)
 	notLoggedIn := func() views.HeaderData {
 		return views.HeaderData{
 			UserName: "",
@@ -24,18 +25,13 @@ func BuildHeaderData(r *http.Request) views.HeaderData {
 		// Can't find cookie
 		return notLoggedIn()
 	}
-	data, err := base64.StdEncoding.DecodeString(cookie.Value)
+	t, err := base64.StdEncoding.DecodeString(cookie.Value)
 	if err != nil {
 		// Wrong formatted Cookie
 		return notLoggedIn()
 	}
-	var userData UserData
-	err = json.Unmarshal(data, &userData)
-	if err != nil {
-		// Wrong formatted cookie
-		return notLoggedIn()
-	}
-	user, err := db.UserByToken(userData.Token)
+	token := string(t[:])
+	user, err := db.UserByToken(token)
 	if err != nil {
 		// Token does not exist or is expired. TODO: Maybe delete cookie
 		return notLoggedIn()
