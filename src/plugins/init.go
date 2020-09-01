@@ -7,10 +7,11 @@ import (
 )
 
 func Init(router *httprouter.Router) {
-	router.POST("/plugins/upload", upload)
-	router.GET("/plugins/download/:pluginName", download)
-	router.GET("/plugins/info/:pluginName/*resource", info)
-	router.GET("/plugins/list", list)
+	router.GET("/plugins/info/:pluginName/*resource", infoWebsite)
+	router.POST("/api/plugins/upload", upload)
+	router.GET("/api/plugins/download/:pluginName", download)
+	router.GET("/api/plugins/info/:pluginName/*resource", infoApi)
+	router.GET("/api/plugins/list", list)
 
 	// folders
 	mkIfNotExist := func(path string) error {

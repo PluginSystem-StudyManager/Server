@@ -1,6 +1,7 @@
 package plugins
 
 //go:generate jade -pkg=views -writer -d ../views tab_info.jade
+//go:generate jade -pkg=views -writer -d ../views tab_info_api.jade
 
 import (
 	"github.com/julienschmidt/httprouter"
@@ -16,12 +17,27 @@ import (
 	"strings"
 )
 
-type tabInfoTemplate struct {
-	Name string
-	Body string
+func infoApi(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	pluginName := p.ByName("pluginName")
+	resourceName := strings.TrimLeft(p.ByName("resource"), "/")
+	switch resourceName {
+	case "html":
+		md := markdown.New(markdown.XHTMLOutput(true))
+		fileData, err := ioutil.ReadFile(filepath.Join(pluginsPath, pluginName, "README.md"))
+		if err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusNotFound)
+			_, _ = w.Write([]byte("Plugin not found")) // TODO: 404 not found page
+			return
+		}
+		body := md.RenderToString(fileData)
+		views.TabInfoApi(body, pluginName, w)
+	default:
+		infoResource(w, r, pluginName, resourceName)
+	}
 }
 
-func info(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func infoWebsite(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	pluginName := p.ByName("pluginName")
 	resourceName := strings.TrimLeft(p.ByName("resource"), "/")
 	switch resourceName {
@@ -38,16 +54,20 @@ func info(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 		header := web_lib.BuildHeaderData(r)
 		views.TabInfo(header, body, pluginName, w)
 	default:
-		if strings.HasPrefix(resourceName, "dist") {
-			http.ServeFile(w, r, "../"+resourceName)
+		infoResource(w, r, pluginName, resourceName)
+	}
+}
+
+func infoResource(w http.ResponseWriter, r *http.Request, pluginName string, resourceName string) {
+	if strings.HasPrefix(resourceName, "dist") {
+		http.ServeFile(w, r, "../"+resourceName)
+	} else {
+		projectRes := utils.StaticFile("plugins/" + resourceName)
+		pluginRes := filepath.Join(pluginsPath, pluginName, resourceName)
+		if _, err := os.Stat(projectRes); !os.IsNotExist(err) {
+			http.ServeFile(w, r, projectRes)
 		} else {
-			projectRes := utils.StaticFile("plugins/" + resourceName)
-			pluginRes := filepath.Join(pluginsPath, pluginName, resourceName)
-			if _, err := os.Stat(projectRes); !os.IsNotExist(err) {
-				http.ServeFile(w, r, projectRes)
-			} else {
-				http.ServeFile(w, r, pluginRes)
-			}
+			http.ServeFile(w, r, pluginRes)
 		}
 	}
 }

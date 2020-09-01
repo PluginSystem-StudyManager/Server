@@ -1,0 +1,10 @@
+block goInit
+    :go:func TabInfoApi(body string, pluginName string)
+
+html
+    head
+        link(rel='stylesheet', href='dist/plugins/markdown.css')
+        link(rel='stylesheet', href='dist/plugins/tab_info.css')
+    body
+        - var bodyString = body;
+        .info !{bodyString}

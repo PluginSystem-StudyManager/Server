@@ -1,13 +1,13 @@
-import requests
-
 import sys
+
+import requests
 
 
 def main(num: int):
     with open("res/my_plugin.zip", "rb") as f:
         for i in range(num):
             cookies = {"token": "12345", "pluginName": f"MyPlugin_{i}"}
-            req = requests.post("http://127.0.0.1:8080/plugins/upload", files={"file": f}, cookies=cookies)
+            req = requests.post("http://127.0.0.1:8080/api/plugins/upload", files={"file": f}, cookies=cookies)
             print(req)
             f.seek(0)
 

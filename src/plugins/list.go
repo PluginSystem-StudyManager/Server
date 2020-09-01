@@ -10,12 +10,21 @@ import (
 )
 
 func list(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	res := db.ListResult{
+		Data:    nil,
+		Message: "",
+		Success: false,
+	}
+
 	plugins, err := db.ListPlugins()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write([]byte(fmt.Sprintf("error getting plugins: %v", err)))
+		res.Message = "Error getting plugins from DB."
+	} else {
+		res.Success = true
+		res.Data = plugins
 	}
-	jsonData, err := json.Marshal(plugins)
+	jsonData, err := json.Marshal(res)
+
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, _ = w.Write([]byte(fmt.Sprintf("error getting plugins: %v", err)))
