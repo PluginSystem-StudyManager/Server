@@ -1,6 +1,6 @@
 FROM yottadb/yottadb AS yottadb
 
-FROM golang
+FROM golang as go
 
 RUN apt update ; apt install libtinfo5
 COPY --from=yottadb /opt/yottadb/current /opt/yottadb/current
@@ -11,11 +11,15 @@ ENV GOBIN /db/bin
 ENV GOPATH /db/go
 ENV PATH=$PATH:/db/bin
 
-COPY . .
+COPY db ./db
+COPY ./schemas ./schemas
 
-RUN . /opt/yottadb/current/ydb_env_set ; go get lang.yottadb.com/go/yottadb
+RUN . /opt/yottadb/current/ydb_env_set > /dev/null ; go get lang.yottadb.com/go/yottadb
+RUN go get -u github.com/a-h/generate/...
 
+WORKDIR /db/db
 
+RUN go generate
 RUN go get -v
 RUN go install -v
 

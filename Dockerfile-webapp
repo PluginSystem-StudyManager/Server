@@ -5,6 +5,7 @@ RUN apk add --no-cache git go npm
 WORKDIR /server
 ENV GOBIN /server/bin
 RUN go get github.com/Joker/jade/cmd/jade
+RUN go get -u github.com/a-h/generate/...
 ENV GOPATH /server
 ENV PATH=$PATH:$GOPATH/bin
 

@@ -1,13 +1,17 @@
 version: "3.3"
 services:
         webapp:
-                build: .
+                build:
+                        context: .
+                        dockerfile: Dockerfile-webapp
                 ports:
                         - "8080:8080"
                 depends_on:
                         - db
         db:
-                build: ./db
+                build:
+                        context: .
+                        dockerfile: Dockerfile-db
                 ports:
                         - "8090:8090"
                 volumes:
