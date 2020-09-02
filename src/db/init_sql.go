@@ -59,9 +59,9 @@ func Init() {
 		log.Fatal(err)
 		return
 	}
+
 	// TODO: Debug only
-	_ = AddUser("John", "12345", "John", "Maier", "John.Maier@erb.de")
-	_ = UpdateToken("John", "12345", "2022")
+	AddDebugUser()
 }
 
 func Close() {

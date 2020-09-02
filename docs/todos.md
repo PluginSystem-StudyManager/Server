@@ -3,11 +3,9 @@
 - release 0.1
     - run on linux
         - test run with yottadb
-    - profile
-        - generate token
-    - plugin upload check against permanent token
     - dev guide
     - remove unneeded links (news)
+    - remove unneeded rows from db (users.firstname, users.lastname) and profile page
     - hash passwords
 - release 0.2
     - preview images plugins

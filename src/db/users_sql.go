@@ -14,6 +14,12 @@ func AddUser(username string, password string, firstName string, lastName string
 	return err
 }
 
+func AddDebugUser() {
+	_, _ = insert(
+		"INSERT INTO users(username, password, firstName, lastName, e_mail, permanent_token, token, token_ttl) values (?, ?, ?, ?, ?, ?, ?, ?)",
+		"John", "12345", "John", "Ross", "john@ross.com", "12345", "12345", "2099")
+}
+
 func CheckCredentials(username string, password string) (bool, error) {
 
 	rows, err := db.Query(`SELECT username, password FROM users where  username=? AND password=?`, username, password)
@@ -91,6 +97,12 @@ func UserByToken(token string) (User, error) {
 	var user User
 	err := xByY("username", "token=? AND token_ttl>=datetime('now')", token, &user.Username)
 	return user, err
+}
+
+func UserIdByPermanentToken(token string) (int, error) {
+	var id int
+	err := xByY("id", "permanent_token=?", token, &id)
+	return id, err
 }
 
 func xByY(selectString string, whereString string, value interface{}, dest ...interface{}) error {

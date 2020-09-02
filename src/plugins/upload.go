@@ -69,7 +69,7 @@ func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Para
 func uploadImpl(token string, pluginId string, fileContent []byte) error {
 	log.Printf("token: %s, pluginId: %s", token, pluginId)
 	// Authenticate
-	userId, err := db.UserIdByToken(token)
+	userId, err := db.UserIdByPermanentToken(token)
 	if err != nil {
 		log.Printf("Not authenticated: %v\n", err)
 		return err
