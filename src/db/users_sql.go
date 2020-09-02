@@ -72,41 +72,15 @@ func UpdateToken(username string, token string, ttl string) error {
 }
 
 func UserIdByToken(token string) (int, error) {
-	rows, err := db.Query(`SELECT id FROM users WHERE token=? AND token_ttl>=datetime('now')`, token)
-	if err != nil {
-		log.Fatal(err)
-		return -1, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var id int
-		err = rows.Scan(&id)
-		if err != nil {
-			log.Fatal(err)
-			return -1, err
-		}
-		return id, nil
-	}
-	return -1, errors.New("no valid token found: " + token)
+	var id int
+	err := xByY("id", "token=? AND token_ttl>=datetime('now')", token, &id)
+	return id, err
 }
 
 func UserIdByUsername(username string) (int, error) {
-	rows, err := db.Query(`SELECT id FROM users WHERE username=?`, username)
-	if err != nil {
-		log.Fatal(err)
-		return -1, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var id int
-		err = rows.Scan(&id)
-		if err != nil {
-			log.Print(err)
-			return -1, err
-		}
-		return id, nil
-	}
-	return -1, errors.New("No user with username: " + username)
+	var id int
+	err := xByY("id", "username=?", username, &id)
+	return id, err
 }
 
 type User struct {
@@ -114,20 +88,25 @@ type User struct {
 }
 
 func UserByToken(token string) (User, error) {
-	rows, err := db.Query(`SELECT username FROM users WHERE token=? AND token_ttl>=datetime('now')`, token)
 	var user User
+	err := xByY("username", "token=? AND token_ttl>=datetime('now')", token, &user.Username)
+	return user, err
+}
+
+func xByY(selectString string, whereString string, value interface{}, dest ...interface{}) error {
+	rows, err := db.Query(`SELECT `+selectString+` FROM users WHERE `+whereString, value)
 	if err != nil {
 		log.Fatal(err)
-		return user, err
+		return err
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err = rows.Scan(&user.Username)
+		err = rows.Scan(dest...)
 		if err != nil {
-			log.Fatal(err)
-			return user, err
+			log.Print(err)
+			return err
 		}
-		return user, nil
+		return nil
 	}
-	return user, errors.New("no valid token found: " + token)
+	return errors.New("nothing found")
 }
