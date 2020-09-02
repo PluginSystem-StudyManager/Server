@@ -43,7 +43,7 @@ func infoWebsite(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	switch resourceName {
 	case "html":
 		md := markdown.New(markdown.XHTMLOutput(true))
-		fileData, err := ioutil.ReadFile(filepath.Join(pluginsPath, pluginName, "README.md"))
+		fileData, err := ioutil.ReadFile(filepath.Join(pluginsPath, pluginName, "info", "README.md"))
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusNotFound)
