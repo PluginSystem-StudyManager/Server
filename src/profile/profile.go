@@ -4,6 +4,7 @@ package profile
 
 import (
 	"github.com/julienschmidt/httprouter"
+	"log"
 	"net/http"
 	"server/db"
 	"server/plugins"
@@ -16,9 +17,13 @@ func Init(router *httprouter.Router) {
 }
 
 func profile(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	username := "John" // TODO: get from Cookie
-	pluginsData := plugins.DbDataToTemplateData(db.ListPluginsByUser(username))
-	name := "Hans Wurst"
 	header := web_lib.BuildHeaderData(request)
-	views.Profile(header, name, pluginsData, writer)
+	username := header.UserName
+	token, err := db.PermanentTokenByUsername(username)
+	if err != nil {
+		log.Println("Error: Token should always exist!")
+		token = "Not set"
+	}
+	pluginsData := plugins.DbDataToTemplateData(db.ListPluginsByUser(username))
+	views.Profile(header, username, token, pluginsData, writer)
 }

@@ -2,7 +2,7 @@ extends ../web_lib/layout
 include  ../web_lib/plugins
 
 block goInit
-    :go:func Profile(header HeaderData, username string, plugins []PluginTemplateData)
+    :go:func Profile(header HeaderData, username string, permanent_token string, plugins []PluginTemplateData)
 
 block variables
     - var title= "Profile"
@@ -36,6 +36,13 @@ block content
                     td
                     td Account created
                     td 08.08.2020
+                tr
+                    td
+                    td Token for Plugin Upload
+                    td
+                        input(style="width: 100px" readonly=true type="text" value=permanent_token)#permanent_token
+                        button.btn(onclick='copyPermanentToken()') Copy to clipboard
+
                 tr.newSection
                 tr
                     td User Information

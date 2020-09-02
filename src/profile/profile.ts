@@ -23,7 +23,14 @@ function Plugins() {
     window.location.hash = "#plugins"
 }
 
-document.addEventListener('DOMContentLoaded', function(){
+function copyPermanentToken() {
+    let item = <HTMLInputElement>document.getElementById("permanent_token")
+    item.select()
+    document.execCommand("copy")
+    // only https: navigator.clipboard.writeText(token).then(r => console.log("Copied: " + navigator.clipboard.readText()))
+}
+
+document.addEventListener('DOMContentLoaded', function () {
     if (window.location.hash.substr(1) === "plugins") {
         Plugins()
     } else {

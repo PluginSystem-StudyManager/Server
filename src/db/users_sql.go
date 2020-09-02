@@ -105,6 +105,12 @@ func UserIdByPermanentToken(token string) (int, error) {
 	return id, err
 }
 
+func PermanentTokenByUsername(username string) (string, error) {
+	var token string
+	err := xByY("permanent_token", "username=?", username, &token)
+	return token, err
+}
+
 func xByY(selectString string, whereString string, value interface{}, dest ...interface{}) error {
 	rows, err := db.Query(`SELECT `+selectString+` FROM users WHERE `+whereString, value)
 	if err != nil {
