@@ -9,7 +9,7 @@ ENV PKG_CONFIG_PATH=/opt/yottadb/current
 WORKDIR /db
 ENV GOBIN /db/bin
 ENV GOPATH /db/go
-ENV PATH=$PATH:/db/bin
+ENV PATH=$PATH:/db/db:/db/bin
 
 COPY db ./db
 COPY ./schemas ./schemas
