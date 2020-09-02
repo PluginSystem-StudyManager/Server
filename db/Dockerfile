@@ -10,7 +10,6 @@ ENV PATH=$PATH:/db/bin
 
 COPY . .
 
-RUN apt install -y curl
 RUN wget -q https://golang.org/dl/go1.14.7.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go1.14.7.linux-amd64.tar.gz; 
 
