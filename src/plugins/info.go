@@ -23,7 +23,7 @@ func infoApi(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	switch resourceName {
 	case "html":
 		md := markdown.New(markdown.XHTMLOutput(true))
-		fileData, err := ioutil.ReadFile(filepath.Join(pluginsPath, pluginName, "README.md"))
+		fileData, err := ioutil.ReadFile(filepath.Join(pluginsPath, pluginName, "info", "README.md"))
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusNotFound)
@@ -63,7 +63,7 @@ func infoResource(w http.ResponseWriter, r *http.Request, pluginName string, res
 		http.ServeFile(w, r, "../"+resourceName)
 	} else {
 		projectRes := utils.StaticFile("plugins/" + resourceName)
-		pluginRes := filepath.Join(pluginsPath, pluginName, resourceName)
+		pluginRes := filepath.Join(pluginsPath, pluginName, "info", resourceName)
 		if _, err := os.Stat(projectRes); !os.IsNotExist(err) {
 			http.ServeFile(w, r, projectRes)
 		} else {

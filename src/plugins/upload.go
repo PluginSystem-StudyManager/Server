@@ -92,7 +92,7 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 
 	// TODO: validate correct uploaded files
 	// read plugin_info.yaml and add entry in db
-	infoFile := filepath.Join(pluginPath, "plugin_info.yaml")
+	infoFile := filepath.Join(pluginPath, "info", "plugin_info.yaml")
 	data, err := ioutil.ReadFile(infoFile)
 	if err != nil {
 		return failedUpload(err, "Error reading file: "+infoFile)
@@ -101,6 +101,10 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 	err = yaml.Unmarshal(data, &pluginInfo)
 	if err != nil {
 		return failedUpload(err, "Error unmarshal: ")
+	}
+	if pluginInfo.Name != pluginId {
+		// TODO: This is just a dirty fix. This needs a better solution, where this error cannot occur
+		return failedUpload(errors.New("different plugin names"), "pluginId ("+pluginId+") is different to pluginName ("+pluginInfo.Name+")")
 	}
 	_, err = db.PluginIdByName(pluginId) // TODO: use Name from File or better ensure both are the same
 	if err != nil {

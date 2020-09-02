@@ -12,6 +12,13 @@ Plugins can be uploaded via a zip file. This file contains:
         - img files
     - icon.png
 
+File Structure:
+
+- zip file
+    - info
+        - 'All info files'
+    - plugin_{PLUGIN_NAME}.jar
+
 ## Plugin info file
 
 description: File contains key value data about the plugin
