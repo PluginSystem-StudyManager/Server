@@ -35,7 +35,7 @@ func PluginIdByName(name string) (int, error) { // TODO: Change name to exists()
 func ListPlugins() ([]*PluginData, error) {
 	req := ListRequest{
 		Search: "",
-		UserId: nil,
+		UserId: -1,
 	}
 	return listPlugins(req)
 }
@@ -43,7 +43,7 @@ func ListPlugins() ([]*PluginData, error) {
 func ListPluginsSearch(value string) ([]*PluginData, error) {
 	req := ListRequest{
 		Search: value,
-		UserId: nil,
+		UserId: -1,
 	}
 	return listPlugins(req)
 }
