@@ -1,22 +1,20 @@
-FROM yottadb/yottadb-base
+FROM yottadb/yottadb AS yottadb
 
-RUN apt update
-RUN apt install -y git 
+FROM golang
+
+RUN apt update ; apt install libtinfo5
+COPY --from=yottadb /opt/yottadb/current /opt/yottadb/current
+ENV PKG_CONFIG_PATH=/opt/yottadb/current
 
 WORKDIR /db
 ENV GOBIN /db/bin
-#ENV GOPATH /db
+ENV GOPATH /db/go
 ENV PATH=$PATH:/db/bin
 
 COPY . .
 
-RUN wget -q https://golang.org/dl/go1.14.7.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.14.7.linux-amd64.tar.gz; 
+RUN . /opt/yottadb/current/ydb_env_set ; go get lang.yottadb.com/go/yottadb
 
-ENV PATH=/usr/local/go/bin:$PATH
-ENV PATH=/db:$PATH
-
-RUN go get lang.yottadb.com/go/yottadb
 
 RUN go get -v
 RUN go install -v
