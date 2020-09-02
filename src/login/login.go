@@ -3,12 +3,11 @@ package login
 //go:generate jade -pkg=views -writer -d ../views login.jade
 
 import (
-	"crypto/rand"
 	"encoding/base64"
-	"encoding/hex"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"server/db"
+	"server/utils"
 	"server/views"
 	"server/web_lib"
 	"time"
@@ -61,10 +60,7 @@ func userLogin(writer http.ResponseWriter, request *http.Request, params httprou
 }
 
 func createCookie(writer http.ResponseWriter, username string) {
-	b := make([]byte, 64)
-	_, _ = rand.Read(b)
-
-	token := hex.EncodeToString(b)
+	token := utils.CreateToken()
 	cookieValue := base64.StdEncoding.EncodeToString([]byte(token))
 
 	ttl, err := time.ParseDuration("12h")

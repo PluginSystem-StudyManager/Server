@@ -3,10 +3,14 @@ package db
 import (
 	"errors"
 	"log"
+	"server/utils"
 )
 
 func AddUser(username string, password string, firstName string, lastName string, email string) error {
-	_, err := insert("INSERT INTO users(username, password, firstName, lastName, e_mail) values (?, ?, ?, ?, ?)", username, password, firstName, lastName, email)
+	permanentToken := utils.CreateToken()
+	_, err := insert(
+		"INSERT INTO users(username, password, firstName, lastName, e_mail, permanent_token) values (?, ?, ?, ?, ?, ?)",
+		username, password, firstName, lastName, email, permanentToken)
 	return err
 }
 
