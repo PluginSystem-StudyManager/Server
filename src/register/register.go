@@ -13,7 +13,7 @@ import (
 
 func Init(router *httprouter.Router) {
 	router.GET("/register", register)
-	router.POST("/checkUserName", checkUserName)
+	router.POST("/checkUserName", checkUserName) // TODO: rename function. also in ts
 }
 
 func register(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
@@ -54,7 +54,7 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, params htt
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
+		web_lib.CreateCookie(writer, userName)
 		writer.Header().Set("Content-Type", "application/json")
 		writer.Write(js)
 

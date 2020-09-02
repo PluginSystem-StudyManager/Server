@@ -3,11 +3,9 @@ package login
 //go:generate jade -pkg=views -writer -d ../views login.jade
 
 import (
-	"encoding/base64"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"server/db"
-	"server/utils"
 	"server/views"
 	"server/web_lib"
 	"time"
@@ -54,34 +52,7 @@ func userLogin(writer http.ResponseWriter, request *http.Request, params httprou
 	if !success {
 		writer.WriteHeader(http.StatusUnauthorized)
 	} else {
-		createCookie(writer, user)
+		web_lib.CreateCookie(writer, user)
 		writer.WriteHeader(http.StatusOK)
-	}
-}
-
-func createCookie(writer http.ResponseWriter, username string) {
-	token := utils.CreateToken()
-	cookieValue := base64.StdEncoding.EncodeToString([]byte(token))
-
-	ttl, err := time.ParseDuration("12h")
-	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	expire := time.Now().Add(ttl)
-
-	cookie := http.Cookie{
-		Name:     web_lib.CookieName,
-		Value:    cookieValue,
-		Expires:  expire,
-		SameSite: http.SameSiteStrictMode, // TODO Vor dem Livebetrieb nur noch https zulassen
-	}
-	http.SetCookie(writer, &cookie)
-
-	err = db.UpdateToken(username, token, expire.String())
-
-	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError) //TODO Anpassen
-		return
 	}
 }

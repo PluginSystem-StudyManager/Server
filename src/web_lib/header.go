@@ -4,7 +4,9 @@ import (
 	"encoding/base64"
 	"net/http"
 	"server/db"
+	"server/utils"
 	"server/views"
+	"time"
 )
 
 const CookieName = "UserToken"
@@ -39,5 +41,32 @@ func BuildHeaderData(r *http.Request) views.HeaderData {
 	return views.HeaderData{
 		UserName: user.Username,
 		LoggedIn: true,
+	}
+}
+
+func CreateCookie(writer http.ResponseWriter, username string) {
+	token := utils.CreateToken()
+	cookieValue := base64.StdEncoding.EncodeToString([]byte(token))
+
+	ttl, err := time.ParseDuration("12h")
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	expire := time.Now().Add(ttl)
+
+	cookie := http.Cookie{
+		Name:     CookieName,
+		Value:    cookieValue,
+		Expires:  expire,
+		SameSite: http.SameSiteStrictMode, // TODO Vor dem Livebetrieb nur noch https zulassen
+	}
+	http.SetCookie(writer, &cookie)
+
+	err = db.UpdateToken(username, token, expire.String())
+
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError) //TODO Anpassen
+		return
 	}
 }

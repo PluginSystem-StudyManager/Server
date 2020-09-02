@@ -41,7 +41,7 @@ function checkRegistration(form: HTMLFormElement) {
                 showErrorMessage(json.Fehlermeldung)
             } else if (json.Fehlercode == 0) {  // kein Fehler
 
-                window.location.assign("/")
+                window.location.assign("/profile")
             }
         })
 
