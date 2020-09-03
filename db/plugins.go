@@ -52,13 +52,13 @@ func addPluginImpl(data PluginData) error {
 		return err
 	}
 	for i, tag := range data.Tags {
-		err = yottadb.SetValE(yottadb.NOTTP, nil, tag, cPlugins, []string{data.Name, cTags, string(rune(i))})
+		err = yottadb.SetValE(yottadb.NOTTP, nil, tag, cPlugins, []string{data.Name, cTags, strconv.Itoa(i)})
 		if err != nil {
 			return err
 		}
 	}
 	for i, author := range data.UserIds {
-		err = yottadb.SetValE(yottadb.NOTTP, nil, string(rune(author)), cPlugins, []string{data.Name, cAuthors, string(rune(i))})
+		err = yottadb.SetValE(yottadb.NOTTP, nil, strconv.Itoa(author), cPlugins, []string{data.Name, cAuthors, strconv.Itoa(i)})
 		if err != nil {
 			return err
 		}
@@ -101,8 +101,9 @@ func listPluginsImpl(request ListRequest) ([]*PluginData, error) {
 
 	var pluginName = ""
 	var plugins []*PluginData
+	var err error
 	for true {
-		pluginName, err := yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName})
+		pluginName, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName})
 		if err != nil {
 			errorCode := yottadb.ErrorCode(err)
 			if errorCode == yottadb.YDB_ERR_NODEEND {

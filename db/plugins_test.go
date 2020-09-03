@@ -31,8 +31,11 @@ func TestListPlugins_ByName(t *testing.T) {
 	if err != nil {
 		t.Fatalf("List returned an error: %v\n", err)
 	}
-	if !cmp.Equal(expected, got) {
-		t.Fatalf("Data is not equal! got: %v, expected: %v\n", got, expected)
+	if len(got) != 1 {
+		t.Fatalf("List size mismatch: want %v, got %v\n", 1, len(got))
+	}
+	if diff := cmp.Diff(expected, *(got[0])); diff != "" {
+		t.Fatalf("listPluginsInfo() mismatch (-want +got):\n%s\n", diff)
 	}
 }
 
