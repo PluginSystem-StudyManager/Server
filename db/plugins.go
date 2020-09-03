@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	cPlugins          = "plugins"
+	cPlugins          = "^plugins"
 	cName             = "name"
 	cShortDescription = "shortDescription"
 	cTags             = "tags"
@@ -112,28 +112,34 @@ func listPluginsImpl(request ListRequest) ([]*PluginData, error) {
 				panic(err) // TODO
 			}
 		}
+		log.Printf("PluginName: %s\n", pluginName)
 		if len(pluginName) > 0 {
 			description, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cShortDescription})
 			name, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cName})
 			var userIds []int
-			i := 0
+			var val = ""
 			for true {
-				val, err := yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cAuthors, string(rune(i))})
+				val, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cAuthors, val})
 				if err != nil {
 					errorCode := yottadb.ErrorCode(err)
 					if errorCode == yottadb.YDB_ERR_NODEEND {
 						break
 					} else {
-						log.Printf("Error reading authod ids: %v", err)
+						log.Printf("Error reading author ids: %v", err)
 						// TODO: handle
 					}
 				}
-				id, err := strconv.Atoi(val)
-				if err != nil {
-					log.Printf("Error converting string to int: %v, %v", val, err)
-					// TODO: handle
+				if len(val) > 0 {
+					idString, err := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cAuthors, val})
+
+					id, err := strconv.Atoi(idString)
+					if err != nil {
+						log.Printf("Error converting string to int: %v, %v", val, err)
+						// TODO: handle
+					}
+					log.Printf("AuthorId: %v\n", id)
+					userIds = append(userIds, id)
 				}
-				userIds = append(userIds, id)
 			}
 			plugin := PluginData{
 				Name:             name,

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/google/go-cmp/cmp"
+	"lang.yottadb.com/go/yottadb"
 	"testing"
 )
 
@@ -13,6 +14,7 @@ var expected = PluginData{
 }
 
 func TestMain(m *testing.M) {
+	_ = yottadb.DeleteE(yottadb.NOTTP, nil, yottadb.YDB_DEL_TREE, "^plugins", []string{})
 	_ = addPluginImpl(expected)
 	_ = addPluginImpl(PluginData{
 		Name:             "Plugin1",
