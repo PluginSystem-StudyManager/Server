@@ -112,7 +112,6 @@ func listPluginsImpl(request ListRequest) ([]*PluginData, error) {
 				panic(err) // TODO
 			}
 		}
-		log.Printf("PluginName: %s\n", pluginName)
 		if len(pluginName) > 0 {
 			// description
 			description, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cShortDescription})
@@ -140,7 +139,6 @@ func listPluginsImpl(request ListRequest) ([]*PluginData, error) {
 						log.Printf("Error converting string to int: %v, %v", val, err)
 						// TODO: handle
 					}
-					log.Printf("AuthorId: %v\n", id)
 					userIds = append(userIds, id)
 				}
 			}
