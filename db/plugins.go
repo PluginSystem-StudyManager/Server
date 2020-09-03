@@ -114,8 +114,11 @@ func listPluginsImpl(request ListRequest) ([]*PluginData, error) {
 		}
 		log.Printf("PluginName: %s\n", pluginName)
 		if len(pluginName) > 0 {
+			// description
 			description, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cShortDescription})
+			// name
 			name, _ := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cName})
+			// User ids
 			var userIds []int
 			var val = ""
 			for true {
@@ -141,10 +144,34 @@ func listPluginsImpl(request ListRequest) ([]*PluginData, error) {
 					userIds = append(userIds, id)
 				}
 			}
+			// tags
+			var tags []string
+			val = ""
+			for true {
+				val, err = yottadb.SubNextE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cTags, val})
+				if err != nil {
+					errorCode := yottadb.ErrorCode(err)
+					if errorCode == yottadb.YDB_ERR_NODEEND {
+						break
+					} else {
+						log.Printf("Error reading tags: %v", err)
+						// TODO: handle
+					}
+				}
+				if len(val) > 0 {
+					tag, err := yottadb.ValE(yottadb.NOTTP, nil, cPlugins, []string{pluginName, cTags, val})
+					if err != nil {
+						log.Printf("Error getting value: %v", err)
+						// TODO: handle
+					}
+					tags = append(tags, tag)
+				}
+			}
+
 			plugin := PluginData{
 				Name:             name,
 				ShortDescription: description,
-				Tags:             nil,
+				Tags:             tags,
 				UserIds:          userIds,
 			}
 			if hasSearch(plugin, search, userId) {
