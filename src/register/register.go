@@ -21,7 +21,7 @@ func register(writer http.ResponseWriter, request *http.Request, _ httprouter.Pa
 	views.Register(header, writer)
 }
 
-func checkUserName(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+func checkUserName(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 
 	err := request.ParseForm()
 	if err != nil {
@@ -31,8 +31,6 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, params htt
 
 	userName := request.Form.Get("UserName")
 	password := request.Form.Get("Password")
-	firstName := request.Form.Get("FirstName")
-	lastName := request.Form.Get("LastName")
 	eMail := request.Form.Get("EMail")
 
 	result, err := db.UsernameAvailable(userName)
@@ -43,7 +41,7 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, params htt
 	}
 
 	if result {
-		err := db.AddUser(userName, password, firstName, lastName, eMail)
+		err := db.AddUser(userName, password, eMail)
 		if err != nil {
 			//do Fehlerbeseitigung
 		}
@@ -56,7 +54,7 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, params htt
 		}
 		web_lib.CreateCookie(writer, userName)
 		writer.Header().Set("Content-Type", "application/json")
-		writer.Write(js)
+		_, _ = writer.Write(js)
 
 	} else {
 
@@ -68,7 +66,7 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, params htt
 		}
 
 		writer.Header().Set("Content-Type", "application/json")
-		writer.Write(js)
+		_, _ = writer.Write(js)
 	}
 
 }

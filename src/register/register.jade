@@ -16,9 +16,6 @@ block content
     form.register-form(onsubmit='checkRegistration(this);return false;')
         img#RegistrationImage(src='/dist/res/mann.svg' width='80px' height='80px')
         h1 User Registration
-        .txtbName
-            input(type='text' name='FirstName' placeholder='First name')
-            input(type='text' name='LastName' placeholder='Last name')
         .txtb
             input(type='text' name='UserName' placeholder='Username')
         .txtb
@@ -30,6 +27,6 @@ block content
         div
             input(type='checkbox' name='CheckBoxAgreement')
             |  I agree to the
-            a(href='') terms and Conditions
-        button.logbtn(type='submit') Sign me up
+            a(href='')  terms and Conditions
+        button.btn.logbtn(type='submit') Sign me up
         #errorMessage

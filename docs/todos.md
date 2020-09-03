@@ -5,14 +5,17 @@
     - yottadb same functionality as sql
         - list plugins from user
     - dev guide
-    - remove unneeded rows from db (users.firstname, users.lastname) and profile page
     - handle different image preview sizes. (set size in css) 
     - hash passwords
 - release 0.2
+    - input validation
+    - define requirements for registration
+    - check security
     - preview images plugins
     - 404 page
     - manage plugins
     - user guide
+    - legal documents
 - release 0.3
     - mobile friendly
     - versioning plugins

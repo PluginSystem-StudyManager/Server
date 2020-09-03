@@ -30,8 +30,6 @@ func Init() {
 		token TEXT UNIQUE ,
 		token_ttl TEXT NULL ,
 		permanent_token TEXT UNIQUE,
-		firstName Text NULL ,
-		lastName Text NULL ,
 		e_mail Text NULL
 	);
 	

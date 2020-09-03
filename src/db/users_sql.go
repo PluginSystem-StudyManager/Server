@@ -6,18 +6,18 @@ import (
 	"server/utils"
 )
 
-func AddUser(username string, password string, firstName string, lastName string, email string) error {
+func AddUser(username string, password string, email string) error {
 	permanentToken := utils.CreateToken()
 	_, err := insert(
-		"INSERT INTO users(username, password, firstName, lastName, e_mail, permanent_token) values (?, ?, ?, ?, ?, ?)",
-		username, password, firstName, lastName, email, permanentToken)
+		"INSERT INTO users(username, password, e_mail, permanent_token) values (?, ?, ?, ?)",
+		username, password, email, permanentToken)
 	return err
 }
 
 func AddDebugUser() {
 	_, _ = insert(
-		"INSERT INTO users(username, password, firstName, lastName, e_mail, permanent_token, token, token_ttl) values (?, ?, ?, ?, ?, ?, ?, ?)",
-		"John", "12345", "John", "Ross", "john@ross.com", "12345", "12345", "2099")
+		"INSERT INTO users(username, password, e_mail, permanent_token, token, token_ttl) values (?, ?, ?, ?, ?, ?)",
+		"John", "12345", "john@ross.com", "12345", "12345", "2099")
 }
 
 func CheckCredentials(username string, password string) (bool, error) {

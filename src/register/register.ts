@@ -1,6 +1,7 @@
 const colorError = '#DC143C'
 const errorField = document.getElementById("errorMessage")
 
+// TODO: Handle error. When an error happens inside this function the parameters are sent via GET request
 function checkRegistration(form: HTMLFormElement) {
 
     // @ts-ignore
@@ -60,7 +61,7 @@ function comparePassword(pwd: string, pwd2: string): boolean {
 
 function allFieldsFilledOut(): boolean {
 
-    let fieldNames = ['FirstName', 'LastName', 'UserName', 'EMail', 'Password', 'PasswordAgain'];
+    let fieldNames = ['UserName', 'EMail', 'Password', 'PasswordAgain'];
     let emptyFields = 0
 
     for (let i = 0; i < fieldNames.length; i++) {
