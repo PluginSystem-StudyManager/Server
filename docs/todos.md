@@ -6,7 +6,6 @@
         - list plugins from user
     - dev guide
     - handle different image preview sizes. (set size in css) 
-    - hash passwords
 - release 0.2
     - input validation
     - define requirements for registration

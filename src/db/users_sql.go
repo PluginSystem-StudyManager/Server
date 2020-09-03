@@ -15,14 +15,15 @@ func AddUser(username string, password string, email string) error {
 }
 
 func AddDebugUser() {
+	passwordHash, _ := utils.HashPassword("12345")
 	_, _ = insert(
 		"INSERT INTO users(username, password, e_mail, permanent_token, token, token_ttl) values (?, ?, ?, ?, ?, ?)",
-		"John", "12345", "john@ross.com", "12345", "12345", "2099")
+		"John", passwordHash, "john@ross.com", "12345", "12345", "2099")
 }
 
 func CheckCredentials(username string, password string) (bool, error) {
 
-	rows, err := db.Query(`SELECT username, password FROM users where  username=? AND password=?`, username, password)
+	rows, err := db.Query(`SELECT password FROM users where  username=?`, username)
 	if err != nil {
 		log.Printf("Query Error: %v", err)
 		return false, err
@@ -31,15 +32,15 @@ func CheckCredentials(username string, password string) (bool, error) {
 	defer rows.Close()
 	for rows.Next() {
 
-		var uName string
-		var pw string
+		var dbPassword string
 
-		err := rows.Scan(&uName, &pw)
+		err := rows.Scan(&dbPassword)
 		if err != nil {
 			log.Printf("Query Error: %v", err)
 			return false, err
 		}
-		if username == uName && password == pw {
+		log.Println(password + " ===" + dbPassword)
+		if utils.CheckPasswordHash(password, dbPassword) {
 			return true, nil
 		}
 	}

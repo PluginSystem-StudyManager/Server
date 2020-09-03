@@ -7,6 +7,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"server/db"
+	"server/utils"
 	"server/views"
 	"server/web_lib"
 )
@@ -41,15 +42,21 @@ func checkUserName(writer http.ResponseWriter, request *http.Request, _ httprout
 	}
 
 	if result {
-		err := db.AddUser(userName, password, eMail)
+		passwordHash, err := utils.HashPassword(password)
 		if err != nil {
-			//do Fehlerbeseitigung
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		err = db.AddUser(userName, passwordHash, eMail)
+		if err != nil {
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		errorM := ErrorMessage{0, "No Error"}
 		js, err := json.Marshal(errorM)
 		if err != nil {
-			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			http.Error(writer, err.Error(), http.StatusInternalServerError) // TODO: undo register?
 			return
 		}
 		web_lib.CreateCookie(writer, userName)
