@@ -1,16 +1,6 @@
-FROM golang as go
+FROM yottadb/yottadb-debian-base
 
-RUN apt update; apt install -y wget binutils pkg-config file
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
-
-RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=en_US.UTF-8
-
-ENV LANG en_US.UTF-8 
-#COPY --from=yottadb /opt/yottadb/current /opt/yottadb/current
-#ENV PKG_CONFIG_PATH=/opt/yottadb/current
-RUN mkdir /tmp/tmp ; cd /tmp/tmp ; wget https://gitlab.com/YottaDB/DB/YDB/raw/master/sr_unix/ydbinstall.sh ; chmod +x ydbinstall.sh ; ./ydbinstall.sh --utf8 default > /tmp/log ; head /tmp/log --lines 100 ; tail /tmp/log --lines 100
+RUN apt update && apt install -y git
 
 WORKDIR /db
 ENV GOBIN /db/bin
@@ -20,7 +10,11 @@ ENV PATH=$PATH:/db/db:/db/bin
 COPY db ./db
 COPY ./schemas ./schemas
 
-RUN . /opt/yottadb/current/ydb_env_set > /dev/null ; go get lang.yottadb.com/go/yottadb
+RUN wget -q https://golang.org/dl/go1.14.7.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.14.7.linux-amd64.tar.gz
+ENV PATH=/usr/local/go/bin:$PATH
+
+RUN go get lang.yottadb.com/go/yottadb
 RUN go get -u github.com/a-h/generate/...
 
 WORKDIR /db/db
