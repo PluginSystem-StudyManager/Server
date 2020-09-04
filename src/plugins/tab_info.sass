@@ -3,24 +3,34 @@
 .metaInfo
     background: var(--color-elevation-20)
     box-shadow: var(--box-shadow-default)
-    position: absolute
-    width: 200px
-    left: 0
+    width: 100%
     padding: 10px
+    box-sizing: border-box
+    display: flex
+    margin-top: 20px
+    border-radius: 3px
+
+    p
+        flex: 1
+        text-align: center
+        font-size: 1.2em
 
     .attributeKey
         color: var(--color-font-weaken)
+
     .attributeValue
         color: var(--color-font-default)
 
 .info
     margin-top: 20px
-    margin-left: auto
-    margin-right: auto
-    //background: var(--color-elevation-10)
+    margin-bottom: 20px
+    width: 100%
+    background: var(--color-elevation-10)
     padding: 10px 30px
     color: var(--color-font-default)
     box-shadow: var(--box-shadow-default)
+    box-sizing: border-box
+    border-radius: 3px
 
     img
         max-width: 100%
