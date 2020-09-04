@@ -18,3 +18,13 @@ func devGuide(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	views.DevGuide(header, w)
 }
+
+/*
+Devguide content
+
+- Objective
+- Setup
+- Development
+- testing
+- publishing
+*/
