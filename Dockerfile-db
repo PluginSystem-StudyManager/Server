@@ -1,10 +1,16 @@
-FROM yottadb/yottadb AS yottadb
-
 FROM golang as go
 
-RUN apt update ; apt install libtinfo5
-COPY --from=yottadb /opt/yottadb/current /opt/yottadb/current
-ENV PKG_CONFIG_PATH=/opt/yottadb/current
+RUN apt update; apt install -y wget binutils pkg-config file
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+
+ENV LANG en_US.UTF-8 
+#COPY --from=yottadb /opt/yottadb/current /opt/yottadb/current
+#ENV PKG_CONFIG_PATH=/opt/yottadb/current
+RUN mkdir /tmp/tmp ; cd /tmp/tmp ; wget https://gitlab.com/YottaDB/DB/YDB/raw/master/sr_unix/ydbinstall.sh ; chmod +x ydbinstall.sh ; ./ydbinstall.sh --utf8 default > /tmp/log ; head /tmp/log --lines 100 ; tail /tmp/log --lines 100
 
 WORKDIR /db
 ENV GOBIN /db/bin
