@@ -34,6 +34,11 @@ func main() {
 	router.GET("/test", func(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 		writer.Write([]byte("Test"))
 	})
+
+	router.GET("/favicon.ico", func(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+		http.ServeFile(w, r, utils.StaticFile("res/favicon.png"))
+	})
+
 	homepage.Init(router)
 	login.Init(router)
 	register.Init(router)
