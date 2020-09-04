@@ -72,6 +72,10 @@ block content
                     .pluginsList
                         for plugin in plugins
                             +Plugin(plugin)
+                        else
+                            .noPluginsAvailable
+                                p There are no plugins created yet. You can be the first one to create one.
+                                a(href="/devguide") Checkout the developers guide and get started.
                 .box-footer.navigationContainer
                     a.btn.navigationButton(href="/marketplace") Browse All Plugins
 
