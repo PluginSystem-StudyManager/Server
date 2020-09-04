@@ -1,9 +1,6 @@
 # TODO's
 
 - release 0.1
-    - run on linux
-    - yottadb same functionality as sql
-        - list plugins from user
     - dev guide
     - handle different image preview sizes. (set size in css) 
 - release 0.2

@@ -8,12 +8,14 @@ package main
 //go:generate go generate server/plugins
 //go:generate go generate server/downloadApplication
 //go:generate go generate server/db
+//go:generate go generate server/dev_guide
 
 import (
 	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"server/db"
+	"server/dev_guide"
 	"server/downloadApplication"
 	"server/homepage"
 	"server/login"
@@ -39,6 +41,7 @@ func main() {
 	marketplace.Init(router)
 	profile.Init(router)
 	downloadApplication.Init(router)
+	dev_guide.Init(router)
 
 	db.Init()
 	defer db.Close()

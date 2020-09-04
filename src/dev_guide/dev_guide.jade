@@ -1,0 +1,13 @@
+extends ../web_lib/layout
+
+block xmlns:height="http://www.w3.org/1999/xhtml" goInit
+    :go:func DevGuide(header HeaderData)
+
+block variables
+    - var title= "Developers guide"
+
+append styles
+    link(rel='stylesheet', href='dist/dev_guide/dev_guide.css')
+
+block content
+    h1 Dev Guide
