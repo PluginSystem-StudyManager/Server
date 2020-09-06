@@ -14,7 +14,7 @@ append scripts
 
 
 block content
-    form.login-form(onsubmit="checkCredentials(this);return false;")
+    form.login-form(onsubmit='checkCredentials(this);return false;')
         h1  Login
         .txtb
             input(name='username' type='text' placeholder='Username')
@@ -22,7 +22,10 @@ block content
             input(name='password' type='password' placeholder='password')
         button.logbtn(type='submit') Login
         #errorMessage
-        .bottom-text
-            | Don&apos;t have account?
-            a(href='/register') Sign up
-
+        .container
+            div
+                | Forget &nbsp;
+                a(href='') Password ?
+            div
+                | Don&apos;t have account? &nbsp;
+                a(href='/register') Sign up
