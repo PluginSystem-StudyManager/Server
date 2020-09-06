@@ -19,11 +19,12 @@ func Init(router *httprouter.Router) {
 func profile(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
 	header := web_lib.BuildHeaderData(request)
 	username := header.UserName
+	email := "John@gmx.de"
 	token, err := db.PermanentTokenByUsername(username)
 	if err != nil {
 		log.Println("Error: Token should always exist!")
 		token = "Not set"
 	}
 	pluginsData := plugins.DbDataToTemplateData(db.ListPluginsByUser(username))
-	views.Profile(header, username, token, pluginsData, writer)
+	views.Profile(header, username, email, token, pluginsData, writer)
 }
