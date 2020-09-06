@@ -100,6 +100,12 @@ func UserByToken(token string) (User, error) {
 	return user, err
 }
 
+//func EMailByToken(token string) (string, error) {
+
+// get User by token ....
+
+//}
+
 func UserIdByPermanentToken(token string) (int, error) {
 	var id int
 	err := xByY("id", "permanent_token=?", token, &id)

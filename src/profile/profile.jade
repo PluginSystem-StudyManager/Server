@@ -2,7 +2,7 @@ extends ../web_lib/layout
 include  ../web_lib/plugins
 
 block goInit
-    :go:func Profile(header HeaderData, username string, permanent_token string, plugins []PluginTemplateData)
+    :go:func Profile(header HeaderData, username string, email string ,permanent_token string, plugins []PluginTemplateData)
 
 block variables
     - var title= "Profile"
@@ -32,6 +32,10 @@ block content
                     td Account Information
                     td Username
                     td #{username}
+                tr
+                    td
+                    td E-mail address
+                    td #{email}
                 tr
                     td
                     td Token for Plugin Upload

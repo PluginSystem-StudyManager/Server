@@ -2,7 +2,8 @@
 
 - release 0.1
     - dev guide
-    - handle different image preview sizes. (set size in css) 
+    - handle different image preview sizes. (set size in css)
+    - add password forgotten function
 - release 0.2
     - input validation
     - define requirements for registration
