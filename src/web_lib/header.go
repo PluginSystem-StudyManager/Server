@@ -20,6 +20,7 @@ func BuildHeaderData(r *http.Request) views.HeaderData {
 	notLoggedIn := func() views.HeaderData {
 		return views.HeaderData{
 			UserName: "",
+			EMail:    "",
 			LoggedIn: false,
 		}
 	}
@@ -34,12 +35,16 @@ func BuildHeaderData(r *http.Request) views.HeaderData {
 	}
 	token := string(t[:])
 	user, err := db.UserByToken(token)
+
+	//TODO hier fehlt noch Mehtode "Email By Tokken.."
+
 	if err != nil {
 		// Token does not exist or is expired. TODO: Maybe delete cookie
 		return notLoggedIn()
 	}
 	return views.HeaderData{
 		UserName: user.Username,
+		EMail:    "", //return der methode E-Mail ...
 		LoggedIn: true,
 	}
 }

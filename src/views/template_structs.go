@@ -7,5 +7,6 @@ type PluginTemplateData struct {
 
 type HeaderData struct {
 	UserName string
+	EMail    string
 	LoggedIn bool
 }
