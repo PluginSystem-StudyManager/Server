@@ -16,27 +16,18 @@ type UserData struct {
 }
 
 func BuildHeaderData(r *http.Request) views.HeaderData {
-	cookie, err := r.Cookie(CookieName)
 	notLoggedIn := func() views.HeaderData {
 		return views.HeaderData{
 			UserName: "",
-			EMail:    "",
 			LoggedIn: false,
 		}
 	}
-	if err != nil {
-		// Can't find cookie
-		return notLoggedIn()
-	}
-	t, err := base64.StdEncoding.DecodeString(cookie.Value)
-	if err != nil {
-		// Wrong formatted Cookie
-		return notLoggedIn()
-	}
-	token := string(t[:])
-	user, err := db.UserByToken(token)
 
-	//TODO hier fehlt noch Mehtode "Email By Tokken.."
+	token, err := GetUserToken(r)
+	if err != nil {
+		return notLoggedIn()
+	}
+	user, err := db.UserByToken(token)
 
 	if err != nil {
 		// Token does not exist or is expired. TODO: Maybe delete cookie
@@ -44,9 +35,23 @@ func BuildHeaderData(r *http.Request) views.HeaderData {
 	}
 	return views.HeaderData{
 		UserName: user.Username,
-		EMail:    "", //return der methode E-Mail ...
 		LoggedIn: true,
 	}
+}
+
+func GetUserToken(r *http.Request) (string, error) {
+	cookie, err := r.Cookie(CookieName)
+	if err != nil {
+		// Can't find cookie
+		return "", err
+	}
+	t, err := base64.StdEncoding.DecodeString(cookie.Value)
+	if err != nil {
+		// Wrong formatted Cookie
+		return "", err
+	}
+	token := string(t[:])
+	return token, nil
 }
 
 func CreateCookie(writer http.ResponseWriter, username string) {

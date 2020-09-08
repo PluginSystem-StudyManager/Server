@@ -92,19 +92,14 @@ func UserIdByUsername(username string) (int, error) {
 
 type User struct {
 	Username string
+	Email    string
 }
 
 func UserByToken(token string) (User, error) {
 	var user User
-	err := xByY("username", "token=? AND token_ttl>=datetime('now')", token, &user.Username)
+	err := xByY("username, e_mail", "token=? AND token_ttl>=datetime('now')", token, &user.Username, &user.Email)
 	return user, err
 }
-
-//func EMailByToken(token string) (string, error) {
-
-// get User by token ....
-
-//}
 
 func UserIdByPermanentToken(token string) (int, error) {
 	var id int
