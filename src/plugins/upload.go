@@ -1,11 +1,13 @@
 package plugins
 
+//go:generate schema-generate -o upload.schema.go -p plugins ../../schemas/plugins/upload.schema.json
+
 import (
 	"archive/zip"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"gopkg.in/yaml.v2"
 	"io"
 	"io/ioutil"
 	"log"
@@ -24,13 +26,6 @@ const (
 // upload parses all data from the request.
 // The final logic is implemented in ``upload_impl()``
 func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-	// Parse arguments
-	token, errToken := request.Cookie("token")
-	pluginId, errId := request.Cookie("pluginName")
-	if errToken != nil || errId != nil {
-		respond(writer, http.StatusBadRequest, "No cookie with authentication data specified")
-		return
-	}
 
 	// TODO: handle wrong formatted upload: file name, too big, ...
 	// max 1000 MB
@@ -40,10 +35,28 @@ func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Para
 		respond(writer, http.StatusBadRequest, "No Multipart form uploaded")
 		return
 	}
-	if _, ok := form.File["file"]; !ok {
-		respond(writer, http.StatusBadRequest, "Multipart form without field `file` uploaded")
-		return
+
+	// Check Form parameters
+	// This can't be refactored into a function, because 'File' and 'Value' are different types
+
+	// File: file, token
+	neededParametersFile := []string{"file"}
+	for _, param := range neededParametersFile {
+		if _, ok := form.File[param]; !ok {
+			respond(writer, http.StatusBadRequest, "Multipart form without field `"+param+"` uploaded!")
+			return
+		}
 	}
+	// Value: plugin_data
+	neededParametersValue := []string{"token", "plugin_data"}
+	for _, param := range neededParametersValue {
+		if _, ok := form.Value[param]; !ok {
+			respond(writer, http.StatusBadRequest, "Multipart form without field `"+param+"` uploaded!")
+			return
+		}
+	}
+
+	// Get zip file content
 	if len(form.File["file"]) != 1 {
 		respond(writer, http.StatusBadRequest, "Multipart form with not exactly one file")
 		return
@@ -58,7 +71,29 @@ func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Para
 	content := make([]byte, file.Size)
 	_, _ = fileHandle.Read(content)
 	_ = fileHandle.Close()
-	err = uploadImpl(token.Value, pluginId.Value, content)
+
+	// Get token
+	if len(form.Value["token"]) != 1 {
+		respond(writer, http.StatusBadRequest, "Multipart form with not exactly one token")
+		return
+	}
+	token := request.MultipartForm.Value["token"][0]
+
+	// Get plugin data
+	if len(form.Value["plugin_data"]) != 1 {
+		respond(writer, http.StatusBadRequest, "Multipart form with not exactly one plugin_data")
+		return
+	}
+	pluginDataString := request.MultipartForm.Value["plugin_data"][0]
+	log.Printf("PluginData: %s", pluginDataString)
+	var pluginData PluginDataUpload
+	err = json.Unmarshal([]byte(pluginDataString), &pluginData)
+	if err != nil {
+		respond(writer, http.StatusBadRequest, "plugin_data is not properly formatted so unmarshal fails")
+		return
+	}
+
+	err = uploadImpl(token, pluginData, content)
 	if err != nil {
 		respond(writer, http.StatusBadRequest, err.Error())
 		return
@@ -66,8 +101,7 @@ func upload(writer http.ResponseWriter, request *http.Request, _ httprouter.Para
 	respond(writer, http.StatusOK, "Successfully uploaded plugin")
 }
 
-func uploadImpl(token string, pluginId string, fileContent []byte) error {
-	log.Printf("token: %s, pluginId: %s", token, pluginId)
+func uploadImpl(token string, pluginData PluginDataUpload, fileContent []byte) error {
 	// Authenticate
 	userId, err := db.UserIdByPermanentToken(token)
 	if err != nil {
@@ -75,9 +109,9 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 		return err
 	}
 	// save and update
-	zipPath := filepath.Join(pluginsTmpPath, fmt.Sprintf("%s.zip", pluginId))
+	zipPath := filepath.Join(pluginsTmpPath, fmt.Sprintf("%s.zip", pluginData.Id))
 	_ = ioutil.WriteFile(zipPath, fileContent, os.ModePerm)
-	pluginPath := filepath.Join(pluginsPath, pluginId)
+	pluginPath := filepath.Join(pluginsPath, pluginData.Id)
 	err = unzip(zipPath, pluginPath)
 	_ = os.Remove(zipPath)
 	if err != nil {
@@ -91,27 +125,14 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 	}
 
 	// TODO: validate correct uploaded files
-	// read plugin_info.yaml and add entry in db
-	infoFile := filepath.Join(pluginPath, "info", "plugin_info.yaml")
-	data, err := ioutil.ReadFile(infoFile)
-	if err != nil {
-		return failedUpload(err, "Error reading file: "+infoFile)
-	}
-	pluginInfo := PluginInfo{}
-	err = yaml.Unmarshal(data, &pluginInfo)
-	if err != nil {
-		return failedUpload(err, "Error unmarshal: ")
-	}
-	if pluginInfo.Name != pluginId {
-		// TODO: This is just a dirty fix. This needs a better solution, where this error cannot occur
-		return failedUpload(errors.New("different plugin names"), "pluginId ("+pluginId+") is different to pluginName ("+pluginInfo.Name+")")
-	}
-	_, err = db.PluginIdByName(pluginId) // TODO: use Name from File or better ensure both are the same
+
+	_, err = db.PluginIdByName(pluginData.Id)
 	if err != nil {
 		// Add
 		err = db.AddPlugin(db.PluginData{
-			Name:             pluginId, // TODO: use Name from File or better ensure both are the same
-			ShortDescription: pluginInfo.ShortDescription,
+			// TODO: Add Plugin ID or use PluginDataUpload + userIDs
+			Name:             pluginData.Name,
+			ShortDescription: pluginData.ShortDescription,
 			Tags:             []string{},
 			UserIds:          []int{userId},
 		})
@@ -123,7 +144,7 @@ func uploadImpl(token string, pluginId string, fileContent []byte) error {
 		// TODO: update shortDescription, tags, ...
 	}
 
-	log.Printf("Successfully uploaded plugin: %s", pluginId)
+	log.Printf("Successfully uploaded plugin: %s", pluginData.Id)
 	return nil
 }
 

@@ -1,7 +1,7 @@
 # Plugin Upload
 
 Plugins can be uploaded via a zip file. This file contains:
-- plugin_info file
+
 - Files needed when installed
     - jar file
 - Files needed for marketplace
