@@ -106,7 +106,7 @@ func uploadImpl(token string, pluginData PluginDataUpload, fileContent []byte) e
 	userId, err := db.UserIdByPermanentToken(token)
 	if err != nil {
 		log.Printf("Not authenticated: %v\n", err)
-		return err
+		return errors.New(fmt.Sprintf("not authenticated: %v", err))
 	}
 	// save and update
 	zipPath := filepath.Join(pluginsTmpPath, fmt.Sprintf("%s.zip", pluginData.Id))
