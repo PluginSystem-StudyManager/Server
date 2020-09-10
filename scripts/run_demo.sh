@@ -2,26 +2,26 @@
 
 sudo apt update
 
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-# clone repository
-# TODO: use current directory as code
-cd ~ || { echo "ERROR: Directory '~' not found"; exit 1; }
-mkdir StudyTool
-cd StudyTool || { echo "ERROR: Directory 'StudyTool' not found"; exit 1; }
-git clone https://github.com/PluginSystem-StudyManager/Server
-cd Server || { echo "ERROR: Directory 'Server' not found"; exit 1; }
-git checkout dev # TODO: remove later on
+# Server/scripts
+cd DIR || {
+  echo "ERROR: Directory " + DIR + "  not found"
+  exit 1
+}
 
 # install Docker
-sudo chmod +x .scripts/install_docker
-./scripts/install_docker
+sudo chmod +x install_docker
+sudo ./install_docker
 
+# Server
+cd ..
 
 # build server
 sudo docker-compose build
 
 # upload 5 dummy plugins
-python3 scripts/mock/file_upload.py 5 --retry&
+python3 scripts/mock/file_upload.py 5 --retry &
 
 # Start the server
-docker-compose up
+sudo docker-compose up

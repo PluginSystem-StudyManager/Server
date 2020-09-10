@@ -1,10 +1,7 @@
 # TODO's
 
-- release 0.1
-    - handle different image preview sizes. (set size in css) 
-    - handle different image preview sizes. (set size in css)
-    - add password forgotten function
 - release 0.2
+    - add password forgotten function
     - dev guide finalize
     - input validation
     - define requirements for registration

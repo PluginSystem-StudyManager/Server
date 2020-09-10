@@ -30,7 +30,8 @@ def main(num: int, retry=False):
             else:
                 time.sleep(3)
                 passed_time += 3
-    zip_file_path = os.path.join(__file__, "../res/my_plugin.zip")
+    zip_file_path = os.path.join(os.path.dirname(__file__), "res/my_plugin.zip")
+
     with open(zip_file_path, "rb") as f:
         for i in range(num):
             name = get_name(num)
