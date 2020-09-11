@@ -1,0 +1,21 @@
+extends ../web_lib/layout
+
+block goInit
+    :go:func DownloadApplication(header HeaderData)
+
+block variables
+    - var title= "Download Application"
+
+append styles
+    link(rel='stylesheet', href='dist/downloadApplication/downloadApplication.css')
+
+block content
+    //- TODO: always use latest
+    .boxes-container
+        .row
+            .box
+                .box-content.center-container
+                    a.btn.downloadBtn(href="https://github.com/JulianSobott/TimeManager/releases/download/v1.0/StudyTool-1.0.exe" download="StudyToolInstaller.exe") Download Application for Windows
+            .box
+                .box-content.center-container
+                    a.btn.downloadBtn(href="https://github.com/JulianSobott/TimeManager/releases/download/v1.0/studytool_1.0-1_amd64.deb" download="studytool_1.0-1_amd64.deb") Download Application for Linux

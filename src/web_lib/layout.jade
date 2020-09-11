@@ -1,0 +1,49 @@
+block goInit
+
+block variables
+//- Variables that can be set in extending views
+
+
+doctype
+html(theme="dark")
+    head
+        title= title
+        block styles
+            link(rel='stylesheet', href='dist/web_lib/stylesheets/menu.css')
+            link(rel='stylesheet', href='dist/web_lib/stylesheets/body.css')
+            link(rel='stylesheet', href='dist/web_lib/stylesheets/plugins.css')
+
+    body
+        block header
+            header
+                .header
+                    ul
+                        li
+                            a(href='/') Home
+                        li
+                            a(href='/downloadApplication') Download
+                        li
+                            a(href='/marketplace') Marketplace
+
+
+                    .absolute-center
+                        a(href="/").menuTitle Study Manager
+
+                    .dropdown
+                        if header.LoggedIn
+                            button.dropbtn #{header.UserName}
+                            .dropdown-content
+                                a(href="/logout") Sign out
+                                a(href='/profile') Your Profile
+                        else
+                            ul
+                                li
+                                    a(href="/login") Login
+                                li
+                                    a(href="/register") Register
+
+
+        .content
+            block content
+
+        block scripts

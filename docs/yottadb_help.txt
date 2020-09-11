@@ -1,0 +1,14 @@
+Get started: https://yottadb.com/product/get-started/
+
+Install:
+mkdir /tmp/tmp ; wget -P /tmp/tmp https://gitlab.com/YottaDB/DB/YDB/raw/master/sr_unix/ydbinstall.sh
+cd /tmp/tmp ; chmod +x ydbinstall.sh
+sudo ./ydbinstall.sh --utf8 default --verbose
+
+apt install pkg-config
+
+source "$(pkg-config --variable=prefix yottadb)"/ydb_env_set
+
+mupip extract -label=Hello -select=hello -format=zwr -stdout
+
+Go Doc: https://godoc.org/lang.yottadb.com/go/yottadb

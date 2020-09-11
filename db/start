@@ -1,0 +1,4 @@
+#!/bin/bash
+
+. /opt/yottadb/current/ydb_env_set
+db

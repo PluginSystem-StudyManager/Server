@@ -1,0 +1,31 @@
+FROM yottadb/yottadb-debian-base
+
+RUN apt update && apt install -y git
+
+WORKDIR /db
+ENV GOBIN /db/bin
+ENV GOPATH /db/go
+ENV PATH=$PATH:/db/db:/db/bin
+
+COPY db ./db
+COPY ./schemas ./schemas
+
+RUN wget -q https://golang.org/dl/go1.14.7.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.14.7.linux-amd64.tar.gz
+ENV PATH=/usr/local/go/bin:$PATH
+
+RUN go get lang.yottadb.com/go/yottadb
+RUN go get -u github.com/a-h/generate/...
+
+WORKDIR /db/db
+
+RUN go generate
+RUN go get -v
+RUN go install -v
+
+EXPOSE 8090
+
+RUN chmod +x start
+
+CMD ["start"]
+

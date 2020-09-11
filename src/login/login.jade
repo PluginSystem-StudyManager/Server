@@ -1,0 +1,31 @@
+extends ../web_lib/layout
+
+block goInit
+    :go:func Login(header HeaderData)
+
+block variables
+    - var title= "Login"
+
+append styles
+    link(rel='stylesheet', href='dist/login/login.css')
+
+append scripts
+    script(src="/dist/login/login.js")
+
+
+block content
+    form.login-form(onsubmit='checkCredentials(this);return false;')
+        h1  Login
+        .txtb
+            input(name='username' type='text' placeholder='Username')
+        .txtb
+            input(name='password' type='password' placeholder='password')
+        button.logbtn(type='submit') Login
+        #errorMessage
+        .container
+            div
+                | Forget &nbsp;
+                a(href='') Password ?
+            div
+                | Don&apos;t have account? &nbsp;
+                a(href='/register') Sign up

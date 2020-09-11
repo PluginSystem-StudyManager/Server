@@ -1,0 +1,32 @@
+extends ../web_lib/layout
+
+block goInit
+    :go:func Register(header HeaderData)
+
+block variables
+    - var title= "Register"
+
+append styles
+    link(rel='stylesheet', href='dist/register/register.css')
+
+append scripts
+    script(src="/dist/register/register.js")
+
+block content
+    form.register-form(onsubmit='checkRegistration(this);return false;')
+        img#RegistrationImage(src='/dist/res/mann.svg' width='80px' height='80px')
+        h1 User Registration
+        .txtb
+            input(type='text' name='UserName' placeholder='Username')
+        .txtb
+            input(type='text' name='EMail' placeholder='Email')
+        #pw1.txtb
+            input(type='password' name='Password' placeholder='Password')
+        #pw2.txtb
+            input(type='password' name='PasswordAgain' placeholder='Repeat Password')
+        div
+            input(type='checkbox' name='CheckBoxAgreement')
+            |  I agree to the
+            a(href='')  terms and Conditions
+        button.btn.logbtn(type='submit') Sign me up
+        #errorMessage
