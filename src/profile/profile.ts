@@ -1,4 +1,3 @@
-
 function AccountSettins() {
     let x = document.getElementById("Plugin");
     let y = document.getElementById("Account");

@@ -25,8 +25,7 @@ function checkCredentials(form: HTMLFormElement) {
                     }
                 }
             })
-    }
-    else{
+    } else {
         let errorField = document.getElementById("errorMessage")
         errorField.innerText = "Bitte Logindaten eingeben"
     }
