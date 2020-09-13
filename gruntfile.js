@@ -77,5 +77,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-sass');
 
-    grunt.registerTask('build', ['copy', 'ts', 'sass']);
+    grunt.registerTask('default', ['copy', 'ts', 'sass']);
 }

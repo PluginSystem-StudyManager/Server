@@ -1,0 +1,100 @@
+extends ../web_lib/layout
+include  ../web_lib/plugins
+
+block xmlns:height="http://www.w3.org/1999/xhtml" goInit
+    :go:func Homepage(header HeaderData, plugins []PluginTemplateData)
+
+block variables
+    - var title= "Homepage"
+
+append styles
+    link(rel='stylesheet', href='dist/homepage/home.css')
+
+append scripts
+    script(src="/dist/homepage/home.js")
+
+
+block content
+    .boxes-container
+        .row
+            // Desktop Application Abschnitt
+            .box
+                .box-header
+                    h2 Desktop Application
+                .box-content
+                    .slideshow-container
+                        // Full-width images with number and caption text
+                        .mySlides.fade
+                            img(src='/dist/res/Timemanager_JavaApplication.png' style='width:100%; height:400px')
+                            .text Plugin Verwaltung
+                        .mySlides.fade
+                            img(src='/dist/res/Timemanager_Timetable.png' style='width:100%; height:400px ')
+                            .text Timetable
+                        .mySlides.fade
+                            img(src='/dist/res/Timemanager_Webview.png' style='width:100%; height:400px ')
+                            .text WebView
+                        // Next and previous buttons
+                        a.prev(onclick='plusSlides(-1)') &#x276E;
+                        a.next(onclick='plusSlides(1)') &#x276F;
+
+                .box-footer.navigationContainer
+                    a.btn.navigationButton(href="/downloadApplication") Download Study Manager
+
+            .box
+                .box-header
+                    h2 User Guide
+                .box-content
+                    .descriptionText
+                        | Brauchen sie hilfe bei mit der Applikation? Hier finden Sie eine Anleitungen zu den
+                        | verschiedenen Funktionen des Study Manager.
+                    div
+                        img.imagePhoto(src='/dist/res/TutorialBSP.jpg')
+                .box-footer.navigationContainer
+                    a.btn.navigationButton(href="/userGuide") User Guide
+
+        //- Plugins
+        .row
+            .box
+                .box-header
+                    h2 Plugin Suche
+                .box-content
+                    .container
+                        .container__item
+                            form.form(action="/marketplace" method="GET")
+                                input.form__field(type='text' placeholder='search term' name="search")
+                                input.btn.btn--primary.btn--inside(type='submit' value="Search")
+
+        .row
+            .box
+                .box-header
+                    h2 Plugins
+                .box-content
+                    .pluginsList
+                        for plugin in plugins
+                            +Plugin(plugin)
+                        else
+                            .noPluginsAvailable
+                                p There are no plugins created yet. You can be the first one to create one.
+                                a(href="/devguide") Checkout the developers guide and get started.
+                .box-footer.navigationContainer
+                    a.btn.navigationButton(href="/marketplace") Browse All Plugins
+
+        .row
+            // Developer Guide Abschnitt
+            .box
+                .box-content
+                    img.CENTERPhoto(src='/dist/res/Quellcode_Image.jpg' style='width:100%; height:300px')
+            .box
+                .box-header
+                    h2 Dev Guide
+                .box-content
+                    p
+                        | You want to create your own plugins and share them with others? Check out this guide.
+                    p
+                        | You will learn how to write your own plugin in
+                        b  Java
+                        |  with
+                        b  Javafx
+                        |  and how to publish it.
+                .box-footer.navigationContainer
+                    a.btn.navigationButton(href="/devguide") Developers guide

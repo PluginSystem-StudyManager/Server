@@ -1,0 +1,12 @@
+mixin Plugin(plugin, editable=false)
+    .plugin
+        a(href='/plugins/info/' + plugin.Name + "/html")
+            .title
+                .icon
+                    img(src='/plugins/info/' + plugin.Name + '/img/icon.png')
+                .name #{plugin.Name}
+            .description #{plugin.ShortDescription}
+            .preview
+                img(src='/plugins/info/' + plugin.Name + '/img/preview/preview_1.png')
+        if editable
+            button.btn#btnManage Manage

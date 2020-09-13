@@ -1,0 +1,57 @@
+
+.plugin
+  border: 2px solid var(--color-border-default)
+  width: 250px
+  float: left
+  margin: 20px
+  box-shadow: var(--box-shadow-default)
+  display: flex
+  flex-direction: column
+
+  a
+    text-decoration: none
+    color: var(--color-font-default)
+    background: var(--color-elevation-10)
+
+    &:hover
+      background: var(--color-elevation-20)
+      cursor: pointer
+
+    &:active
+      color: var(--color-font-default)
+
+    .title
+      padding: 10px
+      height: 32px
+
+      .icon
+        width: 32px
+        float: left
+
+        img
+          width: 100%
+          height: 100%
+          object-fit: contain
+
+      .name
+        line-height: 32px
+        display: inline-block
+        height: 100%
+        width: calc(100% - 32px)
+        text-align: center
+
+    .description
+      border-top: 1px solid rgba(107, 103, 103, 0.5)
+      border-bottom: 2px solid rgba(107, 103, 103, 0.5)
+      padding: 10px
+
+    .preview
+      img
+        width: 100%
+        object-fit: contain
+
+  #btnManage
+    width: 100%
+    padding: 10px
+    font-size: 1.5em
+    box-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.3)

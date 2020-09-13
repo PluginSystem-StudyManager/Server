@@ -1,0 +1,89 @@
+@import "src/web_lib/stylesheets/color_themes"
+
+.parent
+  display: flex
+  flex-direction: row
+  align-items: stretch
+  margin-top: 20px
+
+  .Position
+    flex: 1
+    position: relative
+    min-height: 300px
+    background: linear-gradient(240deg, #676767, grey, #676767)
+    border-radius: 12px
+    display: flex
+    flex-direction: column
+    padding: 20px
+
+    button
+      padding: 10px
+      margin-top: 10px
+
+      &.selected
+        box-shadow: -3px -3px 5px 0px rgba(0, 0, 0, 0.6)
+
+
+  .content-profile
+    flex: 5
+    min-height: 500px
+    margin-left: 20px
+    background: var(--color-elevation-20)
+    padding: 30px
+
+  #Plugin
+    display: none
+    align-items: flex-start
+    flex-wrap: wrap
+
+    .noPlugins
+      font-size: 1.3em
+      color: var(--color-font-default)
+
+  #Account
+    display: block
+
+
+  // Inhalt User information
+  table
+    width: 100%
+
+    tr
+      height: 2em
+
+      td:nth-child(1)
+      // Section name
+             font-size: 1.5em
+
+      td:nth-child(2)
+        font-weight: bold
+
+      td:nth-child(3)
+        font-weight: bold
+
+    .newSection
+      height: 50px
+
+  input[type="password"]
+    font-size: 15px
+    color: white
+    border: none
+    width: 100%
+    outline: none
+    background: none
+    padding: 0 8px
+    height: 30px
+    border-bottom: 2px solid #adadad
+    position: relative
+    margin: 10px 0
+
+  input[type="button"]
+    width: 100%
+    padding: 10px
+
+  #permanent_token
+    background: transparent
+    color: var(--color-font-default)
+    border: 0
+    margin-right: 10px
+

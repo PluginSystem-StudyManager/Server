@@ -1,0 +1,88 @@
+@import "color_themes"
+
+$menu_height: 60px
+
+header
+  background: var(--color-elevation-10)
+  height: $menu_height
+
+  .header
+    max-width: 1280px
+    margin-left: auto
+    margin-right: auto
+    display: flex
+
+    .absolute-center
+      margin: 0 auto
+
+    .menuTitle
+      text-align: center
+      text-transform: uppercase
+      text-decoration: none
+      color: white
+      border-radius: 10px
+      font-size: $menu_height - 10px
+      margin: 0
+
+    ul
+      list-style-type: none
+      margin: 0
+      padding: 0
+      overflow: hidden
+      height: $menu_height
+
+    li
+      float: left
+      height: 100%
+
+      a
+        display: block
+        color: white
+        text-align: center
+        line-height: $menu_height
+        text-decoration: none
+        height: 100%
+        padding: 0 10px
+
+        &:hover:not(.active)
+          background-color: var(--color-button-hover)
+
+    .dropdown
+      position: relative
+      display: inline-block
+      float: right
+      height: $menu_height
+
+      &:hover
+        .dropdown-content
+          display: block
+
+        .dropbtn
+          background-color: var(--color-button-hover)
+
+      .dropbtn
+        background-color: var(--color-button-default)
+        color: white
+        padding: 16px
+        font-size: 16px
+        border: none
+        height: 100%
+
+    .dropdown-content
+      display: none
+      position: absolute
+      background-color: #f1f1f1
+      min-width: 160px
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2)
+      z-index: 1
+
+
+    .dropdown-content
+      a
+        color: black
+        padding: 12px 16px
+        text-decoration: none
+        display: block
+
+        &:hover
+          background-color: #ddd

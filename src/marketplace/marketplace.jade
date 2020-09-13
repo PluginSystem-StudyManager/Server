@@ -1,0 +1,26 @@
+extends ../web_lib/layout
+include ../web_lib/plugins
+
+block goInit
+    :go:func Marketplace(header HeaderData, plugins []PluginTemplateData, searchValue string)
+
+block variables
+    - var title= "Marketplace"
+
+append styles
+    link(rel='stylesheet', href='dist/marketplace/marketplace.css')
+
+block content
+
+    .search
+        form(action="/marketplace" method="GET")
+            input(type="text" placeholder="name, author, tag, ..." name="search", value=searchValue)
+            //- TODO: Replace with icon
+            input.btn(type="submit" value="Search")
+
+    for plugin in plugins
+        +Plugin(plugin)
+    else
+        .noPluginsAvailable
+            p There are no plugins created yet. You can be the first one to create one.
+            a(href="/devguide") Checkout the developers guide and get started.

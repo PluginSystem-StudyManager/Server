@@ -3,7 +3,7 @@
     <node-interpreter value="project" />
     <gruntfile value="$PROJECT_DIR$/gruntfile.js" />
     <tasks>
-      <task value="build" />
+      <task value="default" />
     </tasks>
     <envs />
     <method v="2" />

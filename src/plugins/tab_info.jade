@@ -1,0 +1,27 @@
+extends ../web_lib/layout
+
+block goInit
+    :go:func TabInfo(header HeaderData, body string, pluginName string)
+
+block variables
+    - var title= 'Tab Info: ' + pluginName
+
+append styles
+    link(rel='stylesheet', href='dist/plugins/markdown.css')
+    link(rel='stylesheet', href='dist/plugins/tab_info.css')
+
+mixin attribute(key, value)
+    p
+        span.attributeKey #{key}:
+        span.attributeValue
+            |  #{value}
+
+block content
+
+    .metaInfo
+        +attribute("Name", pluginName)
+        +attribute("Author", "TODO")
+        +attribute("Website", "TODO")
+
+    - var bodyString = body;
+    .info !{bodyString}

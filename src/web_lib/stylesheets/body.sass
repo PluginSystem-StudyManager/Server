@@ -1,0 +1,62 @@
+body
+  margin: 0
+  background-image: linear-gradient(120deg, #3498db, #8e44ad)
+
+.content
+  min-height: 100vh
+  margin: auto
+
+  max-width: 1280px
+
+.btn
+  background: var(--color-button-default)
+  color: var(--color-font-default)
+  text-align: center
+  border: 2px solid var(--color-border-default)
+  box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.75)
+
+  &:hover
+    background: var(--color-button-hover)
+    color: var(--color-font-default)
+    cursor: pointer
+
+  &:active
+    box-shadow: -3px -3px 10px 0px rgba(0, 0, 0, 0.75)
+
+.content
+  a:not(.btn)
+    color: var(--color-font-link)
+
+    &:visited
+      color: var(--color-font-weaken)
+
+
+.boxes-container
+  display: flex
+  flex-direction: column
+  align-items: stretch
+  width: 100%
+
+  .row
+    display: flex
+    flex-direction: row
+    align-items: stretch
+    flex-wrap: wrap
+
+    .box
+      flex: 1
+      margin: 10px
+      display: flex
+      flex-direction: column
+      padding: 20px
+
+      .box-header
+        text-align: center
+
+      .box-content
+        flex: 1
+      // Push footer to bottom /fill space
+
+      .center-container
+        display: flex
+        justify-content: center

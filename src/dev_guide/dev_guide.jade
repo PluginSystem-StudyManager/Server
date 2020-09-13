@@ -1,0 +1,78 @@
+extends ../web_lib/layout
+
+block xmlns:height="http://www.w3.org/1999/xhtml" goInit
+    :go:func DevGuide(header HeaderData)
+
+block variables
+    - var title= "Developers guide"
+
+append styles
+    link(rel='stylesheet', href='dist/dev_guide/dev_guide.css')
+
+block content
+    h1 Dev Guide
+
+    h2#goals Goals
+    ul
+        li
+            a(href="#setup") Setup your environment
+        li
+            a(href="#writing") Develop a plugin
+        li
+            a(href="#publishing") Publish your plugin
+
+    h2#setup Setup
+    p
+        | For now this guide assumes that you are using
+        a(href="https://www.jetbrains.com/idea/")  IntelliJ
+        |  as IDE. Later on this guide will be more generic.
+    ol
+        li Create a new Java gradle project
+        li Replace the content of the
+            em  build.gradle
+            |  file with the following code.
+            script(src="https://gist.github.com/JulianSobott/6b68c350754822c04bd5693f6750d2ea.js?file=build.gradle")
+        li Reload gradle
+        li Execute the task
+            em  study tool/initProject.
+            |  This will create all necessary files with dummy content. In the course of this guide you will learn
+            |  what this files do and how to replace the content with your own.
+        li You can now start developing
+
+    h2#writing Writing the plugin
+
+    ol
+        li Adjust the file
+            em  /info/plugin_info.yaml
+            |  with your own values.
+        li  replace the images under
+            em  /info
+            |  with your own ones.
+        li
+            p Adjust the java and fxml code with your plugin code. You can add more files
+            p If you change the name of the fxml files you also need to change them in the
+                em  build.gradle
+                |  file.
+        li You can now test your plugin
+
+    h2#publishing Publishing the plugin
+
+    ol
+        li Create an account
+            a(href="/register")  here.
+        li Go to your
+            a(href="/profile#account")  profile
+            |  and copy the token for plugin development.
+        li Paste the token in
+            em  GRADLE_HOME/gradle.properties
+            |  as follows:
+            em  studytool.token=YOUR_TOKEN
+        li you can now execute the
+            em  study tool/publishPlugin
+            |  gradle task
+        li Your plugin should be published and you can view it at the
+            a(href="/marketplace")  marketplace
+            |  or in the
+            a(href="/downloadApplication")  desktop application
+
+    h2#conclusion Conclusion
