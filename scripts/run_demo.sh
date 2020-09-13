@@ -43,6 +43,7 @@ fi
 original="try_files \$uri \$uri\/ =404;"
 new="proxy_pass http:\/\/127.0.0.1:8080;"
 sudo sed -i "s/$original/$new/g" /etc/nginx/sites-available/default
+sudo systemctl restart nginx
 
 # upload 5 dummy plugins
 python3 ./scripts/mock/file_upload.py 5 --retry &

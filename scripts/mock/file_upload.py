@@ -34,7 +34,7 @@ def main(num: int, retry=False):
 
     with open(zip_file_path, "rb") as f:
         for i in range(num):
-            name = get_name(num)
+            name = get_name(i)
             plugin_data = {
                 "name": name,
                 "id": name,
