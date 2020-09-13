@@ -1,27 +1,53 @@
 #!/bin/bash
 
-sudo apt update
+INSTALL=true
+
+while true; do
+  case "$1" in
+  -n | --noinstall)
+    INSTALL=false
+    shift
+    ;;
+  -h | --help)
+    printf "Installs everything that is needed and starts the server.\n\n\t-n, --noinstall: To run it without installing and building everything again"
+    exit 0
+    ;;
+  *) break ;;
+  esac
+done
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Server/scripts
-cd DIR || {
-  echo "ERROR: Directory " + DIR + "  not found"
+cd "$DIR" || {
+  echo "ERROR: Directory " + "$DIR" + "  not found"
   exit 1
 }
-
-# install Docker
-sudo chmod +x install_docker
-sudo ./install_docker
 
 # Server
 cd ..
 
-# build server
-sudo docker-compose build
+if [ $INSTALL ]; then
+
+  # install Docker
+  sudo chmod +x ./scripts/install_docker
+  sudo ./scripts/install_docker
+
+  # build server
+  sudo docker-compose build
+fi
+sudo apt update
+
+# configure nginx
+original="try_files \$uri \$uri\/ \=404;"
+new="# $original\n\t\tproxy_pass http:\/\/127.0.0.1:8080;"
+sudo sed -i "s/$original/$new/g" /etc/nginx/sites-enabled/default
 
 # upload 5 dummy plugins
-python3 scripts/mock/file_upload.py 5 --retry &
+python3 ./scripts/mock/file_upload.py 5 --retry &
 
 # Start the server
 sudo docker-compose up
+
+# Undo the changes for nginx to restore previous state
+sudo sed -i "s/$new/$original/g" /etc/nginx/sites-enabled/default
