@@ -5,11 +5,11 @@ INSTALL=true
 while true; do
   case "$1" in
   -n | --noinstall)
-    INSTALL=false
+    INSTALL=false;
     shift
     ;;
   -h | --help)
-    printf "Installs everything that is needed and starts the server.\n\n\t-n, --noinstall: To run it without installing and building everything again"
+    printf "Installs everything that is needed and starts the server.\n\n\t-n, --noinstall: To run it without installing and building everything again";
     exit 0
     ;;
   *) break ;;
@@ -27,7 +27,9 @@ cd "$DIR" || {
 # Server
 cd ..
 
-if [ $INSTALL ]; then
+if [ "$INSTALL" = true ]; then
+
+  sudo apt update
 
   # install Docker
   sudo chmod +x ./scripts/install_docker
@@ -36,12 +38,11 @@ if [ $INSTALL ]; then
   # build server
   sudo docker-compose build
 fi
-sudo apt update
 
 # configure nginx
-original="try_files \$uri \$uri\/ \=404;"
-new="# $original\n\t\tproxy_pass http:\/\/127.0.0.1:8080;"
-sudo sed -i "s/$original/$new/g" /etc/nginx/sites-enabled/default
+original="try_files \$uri \$uri\/ =404;"
+new="proxy_pass http:\/\/127.0.0.1:8080;"
+sudo sed -i "s/$original/$new/g" /etc/nginx/sites-available/default
 
 # upload 5 dummy plugins
 python3 ./scripts/mock/file_upload.py 5 --retry &
@@ -50,4 +51,4 @@ python3 ./scripts/mock/file_upload.py 5 --retry &
 sudo docker-compose up
 
 # Undo the changes for nginx to restore previous state
-sudo sed -i "s/$new/$original/g" /etc/nginx/sites-enabled/default
+sudo sed -i "s/$new/$original/g" /etc/nginx/sites-available/default
