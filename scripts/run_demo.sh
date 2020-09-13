@@ -9,7 +9,7 @@ while true; do
     shift
     ;;
   -h | --help)
-    printf "Installs everything that is needed and starts the server.\n\n\t-n, --noinstall: To run it without installing and building everything again";
+    printf "Installs everything that is needed and starts the server.\n\n  -n, --noinstall: To run it without installing and building everything again";
     exit 0
     ;;
   *) break ;;
@@ -53,3 +53,4 @@ sudo docker-compose up
 
 # Undo the changes for nginx to restore previous state
 sudo sed -i "s/$new/$original/g" /etc/nginx/sites-available/default
+sudo systemctl restart nginx
